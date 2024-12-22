@@ -46,7 +46,7 @@ def api_request(method='post', path='/oauth/token', data='', auth='basic MzRhMDJ
 if __name__ == '__main__':
 	epicenv = ''
 	with open(f'{os.getcwd()}\\{envfile}', 'r') as f:
-		epicenv = f.read()
+		epicenv = f.read().strip()
 
 	auth_code = ''
 	refresh_token = ''
