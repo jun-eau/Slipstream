@@ -43,6 +43,10 @@ You can do this for as many accounts as you want. Just make sure you copy the sc
 
 ##
 
+# Troubleshooting
+
+If it works to begin with and then stops working, it's likely that your refresh code has expired. Refresh codes will last for 23 days, so if you don't launch the script for longer than that then it will expire. It's also possible for them to be invalidated by Epic Games. Just follow steps 1-3 of **Configure the script** and it will work again.
+
 # How does it work?
 
 The script makes use of Epic's Epic Launcher credentials to make API requests to the Epic Games OAuth backend. We first need an Epic Games launcher authorization code which we can get via a browser. Once we have this code, we're allowed to perform API requests as the Epic Games Launcher so long as we're also using valid HTTP Basic Auth credentials associated with the Epic Games Launcher. We can then ask the API to give us an initial, generic OAuth refresh code which we'll then exchange for an `eg1` access code and refresh code. This means we now have game launching permissions, but to launch a game we'll need to exchange this access code for a launcher code. Finally, once we have the launcher code we can start the game by providing it with this launcher code, and the game will verify this code with Epic Games to obtain all of your account details and authorize you into the game itself. 
