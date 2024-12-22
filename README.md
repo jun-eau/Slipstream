@@ -7,6 +7,12 @@ Benefits of using this are:
 * You no longer need to run the Epic Games Launcher at all
 * You can have multiple accounts configured and easily launch them without having to sign out and back in to a different account via Epic Games
 
+# Requirements
+
+* Python 3.7+
+* Epic Games version of Rocket League
+* Steam
+
 To use it, you'll need a valid authorization code. Full instructions on how to configure this script are as follows:
 
 # Configure the script
