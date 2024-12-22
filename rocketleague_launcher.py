@@ -1,7 +1,7 @@
 import os, requests, uuid, subprocess
 
 rlpath = 'C:\\Epic Games\\rocketleague\\Binaries\\Win64\\RocketLeague.exe'
-envfile = '.epivenv'
+envfile = '.epicenv'
 
 # Configure this if you want to proxy the traffic
 #proxy = {'http': '127.0.0.1:8888', 'https': '127.0.0.1:8888'}
