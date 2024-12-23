@@ -89,8 +89,11 @@ if __name__ == '__main__':
 	try:
 		with open(f'{os.getcwd()}\\{envfile}', 'r') as f:
 			epicenv = f.read().strip()
-	except FileNotFoundError as e:
-		messagebox.showwarning('File not found', f'Could not find {os.getcwd()}\\{envfile}\r\n\r\n!!!!\r\n\r\nWe will now open a new browser window...please login and then copy your authorization code!')
+	except:
+		pass
+
+	if len(epicenv) == 0:
+		messagebox.showwarning('Invalid credential file', f'Either {os.getcwd()}\\{envfile} was empty or was not found\r\n\r\n!!!!\r\n\r\nWe will now open a new browser window...please login and then copy your authorization code!')
 		epicenv = get_authorization_code()
 		if len(epicenv) == 32:
 			with open(f'{os.getcwd()}\\{envfile}', 'w') as f:
