@@ -1,4 +1,8 @@
-import os, requests, uuid, subprocess
+import os, requests, uuid, subprocess, ctypes
+
+
+def MsgBox(title, text, style):
+	return ctypes.windll.user32.MessageBoxW(0, text, title, style)
 
 rlpath = 'C:\\Epic Games\\rocketleague\\Binaries\\Win64\\RocketLeague.exe'
 envfile = '.epicenv'
@@ -42,15 +46,22 @@ def api_request(method='post', path='/oauth/token', data='', auth='basic MzRhMDJ
 
 ##########################
 
-
 if __name__ == '__main__':
 	epicenv = ''
-	with open(f'{os.getcwd()}\\{envfile}', 'r') as f:
-		epicenv = f.read().strip()
+
+	try:
+		with open(f'{os.getcwd()}\\{envfile}', 'r') as f:
+			epicenv = f.read().strip()
+	except FileNotFoundError as e:
+		MsgBox('File not found', f'Could not find {os.getcwd()}\\{envfile}. Please make sure this file exists and contains your authorization code!', 0x30)
+		raise e
 
 	auth_code = ''
 	refresh_token = ''
-	if len(epicenv) == 32:
+	if len(epicenv) == 0:
+		MsgBox('Invalid file', f'Your {os.getcwd()}\\{envfile} file does not contain anything! Please make sure this file exists and contains your authorization code!', 0x30)
+		raise Exception(f'Invalid {os.getcwd()}\\{envfile} File')
+	elif len(epicenv) == 32:
 		auth_code = epicenv
 	else:
 		refresh_token = epicenv
@@ -63,9 +74,14 @@ if __name__ == '__main__':
 	# Get a new eg1 access token and refresh code
 	req = api_request(method='post', path='/oauth/token', data='grant_type=refresh_token&refresh_token=' + refresh_token + '&token_type=eg1')
 
-	access_token = req.json()['access_token']
-	refresh_token = req.json()['refresh_token']
-	account_id = req.json()['account_id']
+	response = req.json()
+	if 'errorMessage' in response:
+		MsgBox(response['errorCode'], response['errorMessage'], 0x30)
+		raise Exception(response['errorCode'])
+
+	access_token = response['access_token']
+	refresh_token = response['refresh_token']
+	account_id = response['account_id']
 
 	# Save our refresh code for next time
 	with open(f'{os.getcwd()}\\{envfile}', 'w') as f:
@@ -74,7 +90,12 @@ if __name__ == '__main__':
 	# Exchange our access token for a launcher code
 	req = api_request(method='get', path='/oauth/exchange', auth='bearer ' + access_token)
 
-	code = req.json()['code']
+	response = req.json()
+	if 'errorMessage' in response:
+		MsgBox(response['errorCode'], response['errorMessage'], 0x30)
+		raise Exception(response['errorCode'])
+
+	code = response['code']
 
 	# Launch the game using our launcher exchange code!
 	subprocess.Popen([rlpath, '-AUTH_LOGIN=unused', '-AUTH_PASSWORD=' + code, '-AUTH_TYPE=exchangecode', '-epicapp=Sugar', '-epicenv=Prod', '-EpicPortal', '-epicusername=""', '-epicuserid=' + account_id])
