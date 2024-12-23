@@ -19,8 +19,12 @@ To use it, you'll need a valid authorization code. Full instructions on how to c
 
 1. Login to your Epic Games account at https://www.epicgames.com/id/login
 2. Once logged in, go to https://www.epicgames.com/id/api/redirect?clientId=34a02cf8f4414e29b15921876da36f9a&responseType=code&prompt=login& and copy the `authorizationCode` value (e.g. `33c56a17870a110ea5955c133f5e64c2`)
+
+**You must now do the following steps quickly because the authorizationCode is only valid for a couple of minutes max**:
+
 3. Edit the `.epicenv` file - paste the `authorizationCode` value into it and save it
 4. Edit `rocketleague_launcher.py` and modify the `rlpath` variable to point to wherever your Rocket League executable is
+5. Run the script so it gets an initial refresh code and you can test that it's working (`py rocketleague_launcher.py`) - this should run Rocket League and it should be signed into your account, if not then you did not configure something correctly in steps 1-4
 
 # Configure Steam
 
