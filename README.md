@@ -14,7 +14,7 @@ This project is a complete rewrite of the original Python-based [RocketLeagueLau
 ## Installation
 
 1.  Go to the [**Releases** page](https://github.com/jun-eau/RocketLeagueLauncher/releases) on the right-hand sidebar of this GitHub repository.
-2.  Download the correct file for your operating system:
+2.  Download the correct file for your operating system from the latest release:
     * For Windows: `RocketLeagueLauncher.exe`
     * For Linux: `RocketLeagueLauncher`
 3.  Place the downloaded file in a folder where you want to keep it.
