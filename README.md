@@ -21,7 +21,7 @@ This project is a rewrite of [RocketLeagueLauncher](https://github.com/LittleScr
 Run the launcher once per account to set it up:
 
 1.  **Run Slipstream**: Double-click `Slipstream.exe` (or run `./Slipstream` on Linux).
-2.  **Locate Game**: A file dialog will prompt you to select `RocketLeague.exe` (usually in "Binaries/Win64/" of your game installation).
+2.  **Locate Game**: A file dialog will prompt you to select `RocketLeague.exe` (usually in "/Binaries/Win64" of your game installation).
 3.  **Epic Games Login**: Your browser will open to the Epic Games login. Sign in.
 4.  **Authorization Code**: After login, you'll be redirected to a page displaying a 32-character `authorizationCode`. Copy it.
 5.  **Enter Code in Launcher**: Paste the code into the launcher's dialog box and click OK.
@@ -60,6 +60,8 @@ Add Rocket League launch options (e.g., `-nomovie -high`) via Steam:
 *   **Authentication Error / Expired Session / Wrong Game Path**: Delete `config.json` in the launcher's folder and rerun Slipstream. This restarts the setup, allowing you to re-authenticate and/or correct the game path.
 
 ## License and Credits
+
+This project is open source. See the `LICENSE` file for more details.
 
 This project is a derivative of [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**. Credit for the original concept and authentication flow goes to him.
 
