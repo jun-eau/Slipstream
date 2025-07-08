@@ -1,0 +1,7 @@
+2025/07/08 19:08:03 INFO: Rocket League Path Setup - Please locate your Rocket League executable (e.g., RocketLeague.exe). This will only be asked once.
+2025/07/08 19:08:03 ERROR: Configuration Error - Failed to load configuration.
+
+Please ensure that the program has permissions to read and write 'config.json' in its directory, and that the file is not corrupted.
+If the problem persists, you can try deleting 'config.json' and the program will attempt to recreate it.
+
+Details: you must select a path to continue
