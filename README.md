@@ -66,10 +66,6 @@ Add Rocket League launch options (e.g., `-nomovie -high`) via Steam:
 3.  Run it from the new folder and complete the first-time setup for that account.
     Each folder will have its own `config.json`, keeping accounts isolated. Create separate Steam library entries for each.
 
-## Troubleshooting
-
-*   **Authentication Error / Expired Session / Wrong Game Path**: Delete `config.json` in the launcher's folder and rerun Slipstream. This restarts the setup, allowing you to re-authenticate and/or correct the game path.
-
 ## Building from Source
 
 If you prefer to compile the application yourself, you will need the **Go toolchain** (version 1.24 or newer) installed on your system.
