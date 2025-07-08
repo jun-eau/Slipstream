@@ -2,7 +2,7 @@
 
 **Slipstream** is a standalone, cross-platform application that launches the Epic Games version of Rocket League without needing the Epic Games Launcher.
 
-This project is a complete rewrite of the original Python-based [RocketLeagueLauncher](https://github.com/LittleScripterBoy/Slipstream) by [LittleScripterBoy](https://github.com/LittleScripterBoy). All credit for the original concept and authentication flow goes to him. This version aims to make the tool more accessible by removing the need for any dependencies like Python and streamlining the setup process.
+This project is a complete rewrite of the original Python-based [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by [LittleScripterBoy](https://github.com/LittleScripterBoy). All credit for the original concept and authentication flow goes to him. This version aims to make the tool more accessible by removing the need for any dependencies like Python and streamlining the setup process.
 
 ## Key Benefits
 
@@ -31,11 +31,14 @@ The setup process is now fully interactive and only needs to be done once per ac
 
 The game will now launch. A `config.json` file will be created in the same folder as the launcher. This file stores your game path and session token so you don't have to repeat this process.
 
-## How to Add to Steam
+### How to Add to Steam
 
 1.  In your Steam Library, click **Add a Game** -> **Add a Non-Steam Game...**
 2.  Click **Browse...** and navigate to the folder where you saved `Slipstream.exe` and select it.
 3.  Click **Add Selected Programs**.
+
+> **Note for Linux Users:**
+> You should add the **`Slipstream.exe`** version to Steam, not the native Linux binary. After adding it, right-click on Slipstream in your library, go to **Properties...** -> **Compatibility**, and check the box to **"Force the use of a specific Steam Play compatibility tool"**. Select the latest version of Proton. This ensures both the launcher and the game run correctly.
 
 You can now launch the game directly from your Steam library!
 
