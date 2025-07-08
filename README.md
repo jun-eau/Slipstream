@@ -2,7 +2,7 @@
 
 **Slipstream** is a standalone, cross-platform application that launches the Epic Games version of Rocket League without needing the Epic Games Launcher.
 
-This project is a complete rewrite of the original Python-based [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by [LittleScripterBoy](https://github.com/LittleScripterBoy). All credit for the original concept and authentication flow goes to him. This version aims to make the tool more accessible by removing the need for any dependencies like Python and streamlining the setup process.
+This project is a complete rewrite of the original Python-based [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**. All credit for the original concept and authentication flow goes to him. This version aims to make the tool more accessible by removing the need for any dependencies like Python and streamlining the setup process.
 
 ## Key Benefits
 
