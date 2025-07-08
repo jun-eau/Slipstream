@@ -69,3 +69,11 @@ The launcher will create a separate `config.json` in each folder, keeping your a
 
 * **Authentication Error / Expired Session**: If you get an error message, the simplest fix is to **delete the `config.json` file** and run the launcher again. This will restart the setup process and allow you to get a fresh login token.
 * **Wrong Game Path**: If you accidentally selected the wrong game path, simply delete `config.json` to be prompted for the correct path on the next run.
+
+## License and Credits
+
+This project is a derivative work of the original [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScriptorBoy**. All credit for the original concept and authentication flow goes to him.
+
+The original project was published without a license. An [issue has been opened](https://github.com/LittleScripterBoy/RocketLeagueLauncher/issues/1) requesting that a permissive license be added.
+
+This fork, Slipstream, is distributed in the good-faith belief that the original author would not object to the continuation and improvement of their work for the benefit of the community.
