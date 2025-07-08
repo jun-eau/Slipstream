@@ -1,0 +1,7 @@
+# Ignore compiled executables
+*.exe
+RocketLeagueLauncher
+
+# Ignore local config files
+config.json
+.epicenv
