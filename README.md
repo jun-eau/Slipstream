@@ -6,7 +6,7 @@ This project is a complete rewrite of the original Python-based [RocketLeagueLau
 
 ## Key Benefits
 
-* **Launch via Steam**: Easily add the launcher to Steam to get the full benefits of the Steam Overlay, including FPS counter, web browser, and controller support.
+* **Launch via Steam**: Easily add the launcher to Steam to get the full benefits of the Steam Overlay, including the performance monitor, web browser, and SteamInput.
 * **Skip the Epic Launcher**: You no longer need to have the Epic Games Launcher running to play Rocket League.
 * **Simple Multi-Account Support**: Easily switch between multiple Epic Games accounts.
 * **No Dependencies**: No need to install Python or any other libraries. Just download and run a single executable.
