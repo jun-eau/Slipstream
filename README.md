@@ -27,7 +27,7 @@ This project would not exist without the pioneering work of **LittleScripterBoy*
 
 ## Windows Setup
 
-For the best experience, we recommend adding Slipstream to Steam to get the overlay and controller support.
+For the best experience, it's recommended to add Slipstream to Steam to get the overlay and controller support.
 
 1.  **Run the Launcher**: Double-click `Slipstream.exe`.
 2.  **Locate Game File**: A file dialog will open. Navigate to your Rocket League installation and select `RocketLeague.exe` (usually in the `Binaries/Win64` folder).
