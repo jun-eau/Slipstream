@@ -15,25 +15,16 @@ This project would not exist without the pioneering work of **LittleScripterBoy*
 
 > **Prerequisites:** Rocket League must be installed and kept up-to-date using a game manager like the Epic Games Launcher or Heroic Games Launcher. Slipstream only *launches* the game; it does not install, update, or manage game files.
 
-1.  Go to the [**Releases** page](https://github.com/jun-eau/Slipstream/releases).
-2.  Download the correct file for your OS (`Slipstream.exe` for Windows, `Slipstream` for Linux) and place it in a dedicated folder.
-
-> **Note for Linux Users:**
-> Before running the native Linux binary, you must make it executable. Open a terminal, navigate to the folder where you saved `Slipstream`, and run the following command:
-> ```sh
-> chmod +x Slipstream
-> ```
-> You can then run the application with `./Slipstream`.
-
-## Windows Setup
+### Windows Setup
 
 For the best experience, it's recommended to add Slipstream to Steam to get the overlay and controller support.
 
-1.  **Run the Launcher**: Double-click `Slipstream.exe`.
-2.  **Locate Game File**: A file dialog will open. Navigate to your Rocket League installation and select `RocketLeague.exe` (usually in the `Binaries/Win64` folder).
-3.  **Log In to Epic Games**: Your browser will open. Log in to the Epic account you want to use.
-4.  **Get Authorization Code**: After logging in, you'll be redirected to a page with a 32-character `authorizationCode`. Copy this code.
-5.  **Enter Code**: Paste the code into the launcher's dialog box and click OK.
+1.  Go to the [**Releases** page](https://github.com/jun-eau/Slipstream/releases) and download `Slipstream.exe`.
+2.  **Run the Launcher**: Double-click `Slipstream.exe`.
+3.  **Locate Game File**: A file dialog will open. Navigate to your Rocket League installation and select `RocketLeague.exe` (usually in the `Binaries/Win64` folder).
+4.  **Log In to Epic Games**: Your browser will open. Log in to the Epic account you want to use.
+5.  **Get Authorization Code**: After logging in, you'll be redirected to a page with a 32-character `authorizationCode`. Copy this code.
+6.  **Enter Code**: Paste the code into the launcher's dialog box and click OK.
 
 The game will now launch. A `config.json` file is created, so you won't have to repeat this.
 
@@ -42,7 +33,7 @@ The game will now launch. A `config.json` file is created, so you won't have to 
 2. **Browse...** to where you saved `Slipstream.exe` and select it.
 3. Click **Add Selected Programs**.
 
-## Linux Setup
+### Linux Setup
 
 The recommended method for Linux is to use the Windows version (`Slipstream.exe`) with Proton, as this provides the best compatibility with gamepads and the Steam Overlay.
 
@@ -53,7 +44,7 @@ The recommended method for Linux is to use the Windows version (`Slipstream.exe`
 
 Once configured, Slipstream will launch Rocket League correctly through Proton every time.
 
-> **Using the Native Binary:** The native Linux binary is also provided. Its primary purpose is for initial setup without needing Steam, or for use with other tools like Lutris. To use it, make it executable with `chmod +x Slipstream` and run it with `./Slipstream`. After it saves your `config.json`, it will display a confirmation message, as it cannot launch the Windows game directly. You can then use the recommended Steam method above.
+> **Using the Native Binary:** The native Linux binary is also provided. Its primary purpose is for initial setup without needing Steam, or for use with other tools like Lutris. To use it, make it executable with `chmod +x Slipstream` and run it with `./Slipstream`. After it saves your `config.json`, it will display a confirmation message, as it cannot launch the Windows game directly. You can then use `Slipstream.exe` with your preferred compatibility layer.
 
 ## Updating Slipstream
 
