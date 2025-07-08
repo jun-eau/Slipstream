@@ -70,6 +70,17 @@ func NewAuthenticator() *Authenticator {
 // --- Main Application Logic ---
 
 func main() {
+	// Initialize file logging
+	logFile, err := os.OpenFile(filepath.Join(getExecutableDir(), "slipstream.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Printf("Warning: Failed to open log file: %v", err)
+	} else {
+		defer logFile.Close()
+		// Create a multi-writer to write to both stdout and the log file
+		mw := io.MultiWriter(os.Stdout, logFile)
+		log.SetOutput(mw)
+	}
+
 	// 1. Load configuration.
 	cfg, err := loadConfig()
 	if err != nil {
