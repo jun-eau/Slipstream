@@ -1,8 +1,8 @@
-# Rocket League Launcher (Go Edition)
+# RocketLeagueLauncher (Go Edition)
 
 This is a standalone, cross-platform application that launches the Epic Games version of Rocket League without needing the Epic Games Launcher.
 
-This project is a complete rewrite of the original Python-based [RocketLeagueLauncher](https://github.com/LittleScriptorBoy/RocketLeagueLauncher) by **LittleScriptorBoy**. All credit for the original concept and authentication flow goes to him. This version aims to make the tool more accessible by removing the need for any dependencies like Python.
+This project is a complete rewrite of the original Python-based [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**. All credit for the original concept and authentication flow goes to him. This version aims to make the tool more accessible by removing the need for any dependencies like Python and streamlining the setup process.
 
 ## Key Benefits
 
@@ -38,6 +38,15 @@ The game will now launch. A `config.json` file will be created in the same folde
 3.  Click **Add Selected Programs**.
 
 You can now launch the game directly from your Steam library!
+
+## Adding Custom Launch Options
+
+You can add custom Rocket League launch options (like `-nomovie` or `-high`) directly through Steam. The launcher will automatically forward them to the game.
+
+1.  In your Steam library, right-click on the launcher and select **Properties...**
+2.  In the **General** tab, find the **Launch Options** text box.
+3.  Enter any desired launch options, separated by spaces. For example:
+    `-nomovie -high -USEALLAVAILABLECORES`
 
 ## Using Multiple Accounts
 
