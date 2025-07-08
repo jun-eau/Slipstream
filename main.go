@@ -21,9 +21,10 @@ import (
 // --- Constants ---
 const (
 	// API Configuration
-	epicAPIURL        = "https://account-public-service-prod.ak.epicgames.com/account/api"
-	epicLauncherAuth  = "basic MzRhMDJjZjhmNDQxNGUyOWIxNTkyMTg3NmRhMzZmOWE6ZGFhZmJjY2M3Mzc3NDUwMzlkZmZlNTNkOTRmYzc2Y2Y="
-	epicLoginRedirect = "https://www.epicgames.com/id/api/redirect?clientId=34a02cf8f4414e29b15921876da36f9a&responseType=code&prompt=login"
+	epicAPIURL       = "https://account-public-service-prod.ak.epicgames.com/account/api"
+	epicLauncherAuth = "basic MzRhMDJjZjhmNDQxNGUyOWIxNTkyMTg3NmRhMzZmOWE6ZGFhZmJjY2M3Mzc3NDUwMzlkZmZlNTNkOTRmYzc2Y2Y="
+	// This URL structure forces the login prompt, even if the user is already logged in on their browser.
+	epicLoginRedirect = "https://www.epicgames.com/id/login?redirectUrl=https%3A//www.epicgames.com/id/api/redirect%3FclientId%3D34a02cf8f4414e29b15921876da36f9a%26responseType%3Dcode"
 	tokenPath         = "/oauth/token"
 	exchangePath      = "/oauth/exchange"
 
