@@ -73,7 +73,11 @@ func main() {
 	// 1. Load configuration.
 	cfg, err := loadConfig()
 	if err != nil {
-		showError("Configuration Error", err.Error())
+		detailedMsg := "Failed to load configuration.\n\n" +
+			"Please ensure that the program has permissions to read and write 'config.json' in its directory, and that the file is not corrupted.\n" +
+			"If the problem persists, you can try deleting 'config.json' and the program will attempt to recreate it.\n\n" +
+			"Details: " + err.Error()
+		showError("Configuration Error", detailedMsg)
 		return
 	}
 
@@ -81,7 +85,10 @@ func main() {
 	auth := NewAuthenticator()
 	creds, newEpicToken, err := auth.GetLaunchCredentials(cfg.EpicToken)
 	if err != nil {
-		showError("Authentication Failed", err.Error())
+		detailedMsg := "Authentication Failed.\n\n" +
+			"Your session may have expired or the authentication details are incorrect. The simplest fix is often to delete the 'config.json' file and run Slipstream again to log in from scratch.\n\n" +
+			"Details: " + err.Error()
+		showError("Authentication Failed", detailedMsg)
 		return
 	}
 
@@ -98,7 +105,10 @@ func main() {
 	log.Println("Successfully authenticated. Launching Rocket League...")
 	// os.Args[0] is the program name, os.Args[1:] is all subsequent arguments.
 	if err := launchGame(cfg.RocketLeaguePath, creds, os.Args[1:]); err != nil {
-		showError("Failed to Launch Rocket League", err.Error())
+		detailedMsg := "Failed to Launch Rocket League.\n\n" +
+			"Please ensure the Rocket League path is correctly set in 'config.json' and that the game executable is not missing or corrupted.\n\n" +
+			"Details: " + err.Error()
+		showError("Failed to Launch Rocket League", detailedMsg)
 		return
 	}
 
