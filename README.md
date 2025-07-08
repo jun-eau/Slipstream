@@ -18,6 +18,13 @@ This project would not exist without the pioneering work of **LittleScripterBoy*
 1.  Go to the [**Releases** page](https://github.com/jun-eau/Slipstream/releases).
 2.  Download the correct file for your OS (`Slipstream.exe` for Windows, `Slipstream` for Linux) and place it in a dedicated folder.
 
+> **Note for Linux Users:**
+> Before running the native Linux binary, you must make it executable. Open a terminal, navigate to the folder where you saved `Slipstream`, and run the following command:
+> ```sh
+> chmod +x Slipstream
+> ```
+> You can then run the application with `./Slipstream`.
+
 ## First-Time Setup
 
 Run the launcher once per account to set it up:
@@ -38,7 +45,7 @@ While Slipstream can be run on its own, adding it to a launcher like Steam unloc
 2.  **Browse...** to your `Slipstream.exe` (Windows) or `Slipstream` (Linux native) and select it.
 3.  Click **Add Selected Programs**.
 
-> **Linux Users Note:** For optimal compatibility with Steam Overlay and Proton, it's often better to add the **`Slipstream.exe`** (Windows version) to Steam, not the native Linux binary. After adding it, right-click Slipstream in Steam -> **Properties...** -> **Compatibility** -> check **"Force the use of a specific Steam Play compatibility tool"** and choose the latest Proton version.
+> **Note for Steam on Linux:** For optimal compatibility with Steam Overlay and Proton, it's often better to add the **`Slipstream.exe`** (Windows version) to Steam, not the native Linux binary. After adding it, right-click Slipstream in Steam -> **Properties...** -> **Compatibility** -> check **"Force the use of a specific Steam Play compatibility tool"** and choose the latest Proton version.
 
 ## Updating Slipstream
 
@@ -58,6 +65,10 @@ Add Rocket League launch options (e.g., `-nomovie -high`) via Steam:
 2.  Copy the Slipstream executable into each new folder.
 3.  Run it from the new folder and complete the first-time setup for that account.
     Each folder will have its own `config.json`, keeping accounts isolated. Create separate Steam library entries for each.
+
+## Troubleshooting
+
+*   **Authentication Error / Expired Session / Wrong Game Path**: Delete `config.json` in the launcher's folder and rerun Slipstream. This restarts the setup, allowing you to re-authenticate and/or correct the game path.
 
 ## Building from Source
 
@@ -95,10 +106,6 @@ If you prefer to compile the application yourself, you will need the **Go toolch
     ```
 
 After running the command, the `Slipstream.exe` or `Slipstream` executable will be created in the project directory.
-
-## Troubleshooting
-
-*   **Authentication Error / Expired Session / Wrong Game Path**: Delete `config.json` in the launcher's folder and rerun Slipstream. This restarts the setup, allowing you to re-authenticate and/or correct the game path.
 
 ## License and Credits
 
