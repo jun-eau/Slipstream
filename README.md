@@ -1,17 +1,19 @@
 # Slipstream
 
-**Slipstream** is a cross-platform app that launches the Epic Games version of Rocket League without the Epic Games Launcher.
+**Slipstream** is a standalone, cross-platform app that launches the Epic Games version of Rocket League without the Epic Games Launcher.
 
-This project is a rewrite of [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**, who deserves credit for the original concept and authentication. Slipstream aims for easier use by removing dependencies like Python.
+This project would not exist without the pioneering work of **LittleScripterBoy** on the original [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher). All credit for discovering the authentication flow and the original concept belongs entirely to him. Slipstream is a rewrite that builds upon the solid foundation he created, aiming to make the tool more accessible.
 
 ## Key Benefits
 
-*   **Launch via Steam**: Use Steam Overlay features (performance monitor, browser, SteamInput).
-*   **Skip Epic Launcher**: Play Rocket League without the Epic Games Launcher running.
-*   **Multi-Account Support**: Easily switch between Epic Games accounts.
+*   **Integrate Anywhere**: Add Slipstream to Steam for its overlay and controller support, run it standalone, or integrate it with other game launchers like Playnite or Lutris.
+*   **Skip Epic Launcher**: Play Rocket League without the Epic Games Launcher running in the background.
+*   **Simple Multi-Account Support**: Easily switch between multiple Epic Games accounts.
 *   **No Dependencies**: Download and run a single executable; no Python or other libraries needed.
 
 ## Installation
+
+> **Prerequisites:** Rocket League must be installed and kept up-to-date using a game manager like the Epic Games Launcher or Heroic Games Launcher. Slipstream only *launches* the game; it does not install, update, or manage game files.
 
 1.  Go to the [**Releases** page](https://github.com/jun-eau/Slipstream/releases).
 2.  Download the correct file for your OS (`Slipstream.exe` for Windows, `Slipstream` for Linux) and place it in a dedicated folder.
@@ -29,6 +31,8 @@ Run the launcher once per account to set it up:
 Rocket League will launch. A `config.json` storing your game path and session token is created in the launcher's folder, so you won't need to repeat this setup.
 
 ## Adding to Steam
+
+While Slipstream can be run on its own, adding it to a launcher like Steam unlocks features like the Steam Overlay (for performance monitoring, web browser) and SteamInput (for advanced controller configuration).
 
 1.  In Steam: **Add a Game** -> **Add a Non-Steam Game...**
 2.  **Browse...** to your `Slipstream.exe` (Windows) or `Slipstream` (Linux native) and select it.
@@ -63,6 +67,4 @@ Add Rocket League launch options (e.g., `-nomovie -high`) via Steam:
 
 This project is open source. See the `LICENSE` file for more details.
 
-This project is a derivative of [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**. Credit for the original concept and authentication flow goes to him.
-
-The original project was unlicensed. An [issue](https://github.com/LittleScripterBoy/RocketLeagueLauncher/issues/1) requests a permissive license. Slipstream is distributed hoping the original author supports its continuation and improvement.
+This project is a derivative of [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**. The original project was unlicensed; an [issue](https://github.com/LittleScripterBoy/RocketLeagueLauncher/issues/1) has been opened requesting a permissive license be added. Slipstream is distributed in the good-faith belief that the original author would not object to the continuation and improvement of their work.
