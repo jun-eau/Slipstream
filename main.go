@@ -111,39 +111,50 @@ func main() {
 // It takes the current token and returns the launch credentials and the new token to be saved.
 func (a *Authenticator) GetLaunchCredentials(currentToken string) (LaunchCredentials, string, error) {
 	var creds LaunchCredentials
-	var newRefreshToken string
+	var newRefreshToken string // This will store the latest refresh token to be saved.
+	var currentRefreshToken string
 
-	tokenStr := strings.TrimSpace(currentToken)
-	if tokenStr == "" {
-		// If no token exists, start the first-time setup.
-		authCode, err := a.performFirstTimeSetup()
+	tokenFromConfig := strings.TrimSpace(currentToken)
+
+	if tokenFromConfig == "" {
+		// No token in config, perform first-time setup to get a refresh token.
+		log.Println("No token found in config, performing first-time setup...")
+		initialRefreshToken, err := a.performFirstTimeSetup() // This now returns a refresh token
 		if err != nil {
 			return creds, "", fmt.Errorf("initial setup failed: %w", err)
 		}
-		tokenStr = authCode
-	}
-
-	var refreshToken string
-	if len(tokenStr) == 32 {
-		// It's an authorization code, exchange it for a refresh token.
-		log.Println("Exchanging authorization code for refresh token...")
-		resp, err := a.exchangeAuthCode(tokenStr)
-		if err != nil {
-			return creds, "", fmt.Errorf("could not exchange authorization code: %w", err)
-		}
-		refreshToken = resp.RefreshToken
+		currentRefreshToken = initialRefreshToken
+		// This initial refresh token will also be the newRefreshToken to be saved by main().
+		newRefreshToken = currentRefreshToken
 	} else {
-		// It's already a refresh token.
-		refreshToken = tokenStr
+		// Token found in config, assume it's a refresh token.
+		currentRefreshToken = tokenFromConfig
 	}
 
-	// Use the refresh token to get a new access token.
-	log.Println("Acquiring new access token...")
-	tokenResp, err := a.exchangeRefreshToken(refreshToken)
+	// Use the current refresh token (either from config or first-time setup) to get a new access token.
+	log.Println("Acquiring new access token using refresh token...")
+	tokenResp, err := a.exchangeRefreshToken(currentRefreshToken)
 	if err != nil {
-		return creds, "", fmt.Errorf("your session may have expired. Please delete '%s' to log in again. Original error: %w", configFileName, err)
+		// If exchanging refresh token fails, it might be expired.
+		// Try to perform first-time setup again as a recovery mechanism.
+		log.Printf("Failed to exchange refresh token (%v). Attempting first-time setup again.", err)
+		recoveredRefreshToken, setupErr := a.performFirstTimeSetup()
+		if setupErr != nil {
+			return creds, "", fmt.Errorf("failed to exchange refresh token and subsequent first-time setup also failed: %w (original error: %v)", setupErr, err)
+		}
+		log.Println("Successfully obtained a new refresh token via recovery setup.")
+		currentRefreshToken = recoveredRefreshToken
+		newRefreshToken = currentRefreshToken // This is the new token to save.
+
+		// Retry exchanging the newly obtained refresh token for an access token.
+		log.Println("Retrying: Acquiring new access token with newly recovered refresh token...")
+		tokenResp, err = a.exchangeRefreshToken(currentRefreshToken)
+		if err != nil {
+			return creds, "", fmt.Errorf("could not get access token even after recovery via first-time setup: %w", err)
+		}
 	}
-	newRefreshToken = tokenResp.RefreshToken // This is the token we want to save.
+	// Always update newRefreshToken with the latest one from the exchange, as it might have been rotated.
+	newRefreshToken = tokenResp.RefreshToken
 
 	// Finally, exchange the access token for the game launch code.
 	log.Println("Acquiring game launch exchange code...")
@@ -186,14 +197,23 @@ func (a *Authenticator) performFirstTimeSetup() (string, error) {
 	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account, then copy the 'authorizationCode' value from the page you are redirected to.")
 	openBrowser(epicLoginRedirect)
 
-	authCode, err := askForInput("Enter Authorization Code", "Paste the 32-character authorization code here:")
+	authCodeStr, err := askForInput("Enter Authorization Code", "Paste the 32-character authorization code here:")
 	if err != nil {
 		return "", fmt.Errorf("user cancelled input")
 	}
-	if len(authCode) != 32 {
+	if len(authCodeStr) != 32 {
 		return "", fmt.Errorf("invalid authorization code: must be 32 characters long")
 	}
-	return authCode, nil
+
+	log.Println("Exchanging authorization code for refresh token...")
+	resp, err := a.exchangeAuthCode(authCodeStr)
+	if err != nil {
+		return "", fmt.Errorf("could not exchange authorization code: %w", err)
+	}
+	if resp.RefreshToken == "" {
+		return "", fmt.Errorf("did not receive a refresh token after exchanging authorization code")
+	}
+	return resp.RefreshToken, nil
 }
 
 func (a *Authenticator) exchangeAuthCode(code string) (apiResponse, error) {
