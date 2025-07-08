@@ -3,7 +3,6 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -71,9 +70,6 @@ func NewAuthenticator() *Authenticator {
 // --- Main Application Logic ---
 
 func main() {
-	// This allows us to capture any extra arguments passed to the executable.
-	flag.Parse()
-
 	// 1. Load configuration.
 	cfg, err := loadConfig()
 	if err != nil {
@@ -100,8 +96,8 @@ func main() {
 
 	// 4. Launch Rocket League with the obtained credentials and any extra args.
 	log.Println("Successfully authenticated. Launching Rocket League...")
-	// Pass the extra arguments from the command line to the game.
-	if err := launchGame(cfg.RocketLeaguePath, creds, flag.Args()); err != nil {
+	// os.Args[0] is the program name, os.Args[1:] is all subsequent arguments.
+	if err := launchGame(cfg.RocketLeaguePath, creds, os.Args[1:]); err != nil {
 		showError("Failed to Launch Rocket League", err.Error())
 		return
 	}
