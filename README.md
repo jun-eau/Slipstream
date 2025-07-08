@@ -61,6 +61,10 @@ If you want to use a second account:
 
 The launcher will create a separate `config.json` in each folder, keeping your accounts isolated. You can create a separate Steam library entry for each account's launcher.
 
+## How to Update Slipstream
+
+Simply replace your current Slipstream executable with the latest release. That's it!
+
 ## Troubleshooting
 
 * **Authentication Error / Expired Session**: If you get an error message, the simplest fix is to **delete the `config.json` file** and run the launcher again. This will restart the setup process and allow you to get a fresh login token.
