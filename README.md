@@ -42,6 +42,10 @@ The game will now launch. A `config.json` file will be created in the same folde
 
 You can now launch the game directly from your Steam library!
 
+### How to Update Slipstream
+
+Simply replace your current Slipstream executable with the latest release. That's it!
+
 ## Adding Custom Launch Options
 
 You can add custom Rocket League launch options (like `-nomovie` or `-high`) directly through Steam. The launcher will automatically forward them to the game.
@@ -60,10 +64,6 @@ If you want to use a second account:
 3.  Run it from the new folder and complete the first-time setup for your alternate account.
 
 The launcher will create a separate `config.json` in each folder, keeping your accounts isolated. You can create a separate Steam library entry for each account's launcher.
-
-## How to Update Slipstream
-
-Simply replace your current Slipstream executable with the latest release. That's it!
 
 ## Troubleshooting
 
