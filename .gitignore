@@ -1,7 +1,6 @@
-# Ignore compiled executables
-*.exe
-RocketLeagueLauncher
+# Compiled executables
+Slipstream.exe
+Slipstream
 
-# Ignore local config files
+# Local user configuration
 config.json
-.epicenv

@@ -3,6 +3,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -20,10 +21,15 @@ import (
 
 // --- Constants ---
 const (
+	// API Configuration
 	epicAPIURL        = "https://account-public-service-prod.ak.epicgames.com/account/api"
 	epicLauncherAuth  = "basic MzRhMDJjZjhmNDQxNGUyOWIxNTkyMTg3NmRhMzZmOWE6ZGFhZmJjY2M3Mzc3NDUwMzlkZmZlNTNkOTRmYzc2Y2Y="
 	epicLoginRedirect = "https://www.epicgames.com/id/api/redirect?clientId=34a02cf8f4414e29b15921876da36f9a&responseType=code&prompt=login"
-	configFileName    = "config.json"
+	tokenPath         = "/oauth/token"
+	exchangePath      = "/oauth/exchange"
+
+	// Local file configuration
+	configFileName = "config.json"
 )
 
 // --- Data Structures ---
@@ -65,6 +71,9 @@ func NewAuthenticator() *Authenticator {
 // --- Main Application Logic ---
 
 func main() {
+	// This allows us to capture any extra arguments passed to the executable.
+	flag.Parse()
+
 	// 1. Load configuration.
 	cfg, err := loadConfig()
 	if err != nil {
@@ -89,9 +98,10 @@ func main() {
 		}
 	}
 
-	// 4. Launch Rocket League with the obtained credentials.
+	// 4. Launch Rocket League with the obtained credentials and any extra args.
 	log.Println("Successfully authenticated. Launching Rocket League...")
-	if err := launchGame(cfg.RocketLeaguePath, creds); err != nil {
+	// Pass the extra arguments from the command line to the game.
+	if err := launchGame(cfg.RocketLeaguePath, creds, flag.Args()); err != nil {
 		showError("Failed to Launch Rocket League", err.Error())
 		return
 	}
@@ -123,7 +133,7 @@ func (a *Authenticator) GetLaunchCredentials(currentToken string) (LaunchCredent
 		log.Println("Exchanging authorization code for refresh token...")
 		resp, err := a.exchangeAuthCode(tokenStr)
 		if err != nil {
-			return creds, "", err
+			return creds, "", fmt.Errorf("could not exchange authorization code: %w", err)
 		}
 		refreshToken = resp.RefreshToken
 	} else {
@@ -143,7 +153,7 @@ func (a *Authenticator) GetLaunchCredentials(currentToken string) (LaunchCredent
 	log.Println("Acquiring game launch exchange code...")
 	exchangeResp, err := a.getExchangeCode(tokenResp.AccessToken)
 	if err != nil {
-		return creds, newRefreshToken, err
+		return creds, newRefreshToken, fmt.Errorf("could not get game launch code: %w", err)
 	}
 
 	creds.ExchangeCode = exchangeResp.Code
@@ -151,7 +161,8 @@ func (a *Authenticator) GetLaunchCredentials(currentToken string) (LaunchCredent
 	return creds, newRefreshToken, nil
 }
 
-func launchGame(path string, creds LaunchCredentials) error {
+// The function now accepts extraArgs to pass to the game.
+func launchGame(path string, creds LaunchCredentials, extraArgs []string) error {
 	args := []string{
 		"-AUTH_LOGIN=unused",
 		"-AUTH_PASSWORD=" + creds.ExchangeCode,
@@ -162,6 +173,9 @@ func launchGame(path string, creds LaunchCredentials) error {
 		"-epicusername=\"\"",
 		"-epicuserid=" + creds.AccountID,
 	}
+
+	// Append the extra launch options from Steam.
+	args = append(args, extraArgs...)
 
 	cmd := exec.Command(path, args...)
 	if err := cmd.Start(); err != nil {
@@ -203,9 +217,9 @@ func (a *Authenticator) exchangeRefreshToken(token string) (apiResponse, error) 
 
 func (a *Authenticator) makeTokenRequest(data url.Values) (apiResponse, error) {
 	var resp apiResponse
-	err := a.apiRequest("POST", "/oauth/token", data, epicLauncherAuth, &resp)
+	err := a.apiRequest("POST", tokenPath, data, epicLauncherAuth, &resp)
 	if err != nil {
-		return resp, err
+		return resp, fmt.Errorf("token request failed: %w", err)
 	}
 	if resp.ErrorCode != "" {
 		return resp, fmt.Errorf("API error: %s", resp.ErrorMessage)
@@ -216,9 +230,9 @@ func (a *Authenticator) makeTokenRequest(data url.Values) (apiResponse, error) {
 func (a *Authenticator) getExchangeCode(accessToken string) (apiResponse, error) {
 	var resp apiResponse
 	authHeader := "bearer " + accessToken
-	err := a.apiRequest("GET", "/oauth/exchange", nil, authHeader, &resp)
+	err := a.apiRequest("GET", exchangePath, nil, authHeader, &resp)
 	if err != nil {
-		return resp, err
+		return resp, fmt.Errorf("exchange code request failed: %w", err)
 	}
 	if resp.ErrorCode != "" {
 		return resp, fmt.Errorf("API error: %s", resp.ErrorMessage)
@@ -246,12 +260,12 @@ func (a *Authenticator) apiRequest(method, path string, data url.Values, authHea
 
 	resp, err := a.client.Do(req)
 	if err != nil {
-		return fmt.Errorf("request failed: %w", err)
+		return fmt.Errorf("http request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if err := json.NewDecoder(resp.Body).Decode(target); err != nil {
-		return fmt.Errorf("failed to decode response: %w", err)
+		return fmt.Errorf("failed to decode json response: %w", err)
 	}
 
 	return nil
