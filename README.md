@@ -59,6 +59,43 @@ Add Rocket League launch options (e.g., `-nomovie -high`) via Steam:
 3.  Run it from the new folder and complete the first-time setup for that account.
     Each folder will have its own `config.json`, keeping accounts isolated. Create separate Steam library entries for each.
 
+## Building from Source
+
+If you prefer to compile the application yourself, you will need the **Go toolchain** (version 1.24 or newer) installed on your system.
+
+1.  **Clone the repository:**
+    ```sh
+    git clone https://github.com/jun-eau/Slipstream.git
+    ```
+
+2.  **Navigate to the project directory:**
+    ```sh
+    cd Slipstream
+    ```
+
+3.  **Build the executable:**
+    The Go toolchain makes it simple to compile for different operating systems. Run the command corresponding to your target platform.
+
+    **For Windows (64-bit):**
+    ```sh
+    go build -o Slipstream.exe .
+    ```
+    *On Linux or macOS, you can cross-compile for Windows with:*
+    ```sh
+    GOOS=windows GOARCH=amd64 go build -o Slipstream.exe .
+    ```
+
+    **For Linux (64-bit):**
+    ```sh
+    go build -o Slipstream .
+    ```
+    *On Windows, you can cross-compile for Linux with:*
+    ```powershell
+    $env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o Slipstream .
+    ```
+
+After running the command, the `Slipstream.exe` or `Slipstream` executable will be created in the project directory.
+
 ## Troubleshooting
 
 *   **Authentication Error / Expired Session / Wrong Game Path**: Delete `config.json` in the launcher's folder and rerun Slipstream. This restarts the setup, allowing you to re-authenticate and/or correct the game path.
