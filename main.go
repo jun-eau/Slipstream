@@ -190,8 +190,20 @@ func (a *Authenticator) GetLaunchCredentials(currentToken string) (LaunchCredent
 	return creds, newRefreshToken, nil
 }
 
-// The function now accepts extraArgs to pass to the game.
+// launchGame starts the game with the provided credentials and arguments.
+// On Linux, it detects if the target is a Windows executable and guides the user.
 func launchGame(path string, creds LaunchCredentials, extraArgs []string) error {
+	// On Linux, we can't directly execute a Windows .exe.
+	// Instead of failing with a cryptic error, we'll guide the user.
+	if runtime.GOOS == "linux" && strings.HasSuffix(strings.ToLower(path), ".exe") {
+		showInfo("Setup Complete!",
+			"Your configuration and login token have been successfully saved to 'config.json'.\n\n"+
+				"To play, please add 'Slipstream.exe' (the Windows version) to Steam or Lutris and run it using Proton or Wine. "+
+				"It will use the config file you just created.")
+		// We return 'nil' because this is an expected outcome, not an application error.
+		return nil
+	}
+
 	args := []string{
 		"-AUTH_LOGIN=unused",
 		"-AUTH_PASSWORD=" + creds.ExchangeCode,

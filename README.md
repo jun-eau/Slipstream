@@ -25,27 +25,35 @@ This project would not exist without the pioneering work of **LittleScripterBoy*
 > ```
 > You can then run the application with `./Slipstream`.
 
-## First-Time Setup
+## Windows Setup
 
-Run the launcher once per account to set it up:
+For the best experience, we recommend adding Slipstream to Steam to get the overlay and controller support.
 
-1.  **Run Slipstream**: Double-click `Slipstream.exe` (or run `./Slipstream` on Linux).
-2.  **Locate Game**: A file dialog will prompt you to select `RocketLeague.exe` (usually in "/Binaries/Win64" of your game installation).
-3.  **Epic Games Login**: Your browser will open to the Epic Games login. Sign in.
-4.  **Authorization Code**: After login, you'll be redirected to a page displaying a 32-character `authorizationCode`. Copy it.
-5.  **Enter Code in Launcher**: Paste the code into the launcher's dialog box and click OK.
+1.  **Run the Launcher**: Double-click `Slipstream.exe`.
+2.  **Locate Game File**: A file dialog will open. Navigate to your Rocket League installation and select `RocketLeague.exe` (usually in the `Binaries/Win64` folder).
+3.  **Log In to Epic Games**: Your browser will open. Log in to the Epic account you want to use.
+4.  **Get Authorization Code**: After logging in, you'll be redirected to a page with a 32-character `authorizationCode`. Copy this code.
+5.  **Enter Code**: Paste the code into the launcher's dialog box and click OK.
 
-Rocket League will launch. A `config.json` storing your game path and session token is created in the launcher's folder, so you won't need to repeat this setup.
+The game will now launch. A `config.json` file is created, so you won't have to repeat this.
 
-## Adding to Steam
+**To add Slipstream to Steam:**
+1. In Steam: **Add a Game** -> **Add a Non-Steam Game...**
+2. **Browse...** to where you saved `Slipstream.exe` and select it.
+3. Click **Add Selected Programs**.
 
-While Slipstream can be run on its own, adding it to a launcher like Steam unlocks features like the Steam Overlay (for performance monitoring, web browser) and SteamInput (for advanced controller configuration).
+## Linux Setup
 
-1.  In Steam: **Add a Game** -> **Add a Non-Steam Game...**
-2.  **Browse...** to your `Slipstream.exe` (Windows) or `Slipstream` (Linux native) and select it.
-3.  Click **Add Selected Programs**.
+The recommended method for Linux is to use the Windows version (`Slipstream.exe`) with Proton, as this provides the best compatibility with gamepads and the Steam Overlay.
 
-> **Note for Steam on Linux:** For optimal compatibility with Steam Overlay and Proton, it's often better to add the **`Slipstream.exe`** (Windows version) to Steam, not the native Linux binary. After adding it, right-click Slipstream in Steam -> **Properties...** -> **Compatibility** -> check **"Force the use of a specific Steam Play compatibility tool"** and choose the latest Proton version.
+1.  **Download the Windows Version**: Get `Slipstream.exe` from the [Releases page](https://github.com/jun-eau/Slipstream/releases).
+2.  **Add to Steam**: In your Steam library, click **Add a Game** -> **Add a Non-Steam Game...** and select the `Slipstream.exe` file.
+3.  **Force Proton**: Right-click on Slipstream in Steam -> **Properties...** -> **Compatibility**. Check the box to **"Force the use of a specific Steam Play compatibility tool"** and choose the latest Proton version.
+4.  **Run and Configure**: Launch Slipstream from Steam. It will guide you through the one-time setup (locating `RocketLeague.exe`, browser login, etc.) just like on Windows.
+
+Once configured, Slipstream will launch Rocket League correctly through Proton every time.
+
+> **Using the Native Binary:** The native Linux binary is also provided. Its primary purpose is for initial setup without needing Steam, or for use with other tools like Lutris. To use it, make it executable with `chmod +x Slipstream` and run it with `./Slipstream`. After it saves your `config.json`, it will display a confirmation message, as it cannot launch the Windows game directly. You can then use the recommended Steam method above.
 
 ## Updating Slipstream
 
