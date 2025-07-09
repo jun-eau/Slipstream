@@ -2,7 +2,7 @@
 
 **Slipstream** is a standalone, cross-platform app that launches the Epic Games version of Rocket League without the Epic Games Launcher.
 
-This project would not exist without the pioneering work of **LittleScripterBoy** on the original [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher). All credit for discovering the authentication flow and the original concept belongs entirely to him. Slipstream is a rewrite that builds upon the solid foundation he created, aiming to make the tool more accessible.
+This project would not exist without the work of **LittleScripterBoy** on the original [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher). All credit for the authentication flow and the original concept belongs entirely to him. Slipstream is a rewrite that builds upon the foundation he created, aiming to make the tool more accessible and straightforward.
 
 ### Key Benefits
 
