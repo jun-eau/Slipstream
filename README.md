@@ -48,7 +48,7 @@ The recommended method for Linux is to use the Windows version (`Slipstream.exe`
 
 Once configured, Slipstream will launch Rocket League correctly using Proton.
 
-> **Using the Native Binary:** The native Linux binary is also provided. Its primary purpose is for initial setup without needing Steam/Proton running, or for use with other tools like Lutris. If you're having trouble with the in-game browser or file picker under Proton, using the native binary first for setup can be a reliable alternative. To use it:
+> **Using the Native Binary:** The native Linux binary is also provided. Its primary purpose is for initial setup without needing Steam/Proton running, or for use with other tools like Lutris. If you're having trouble with the file picker or authentication process under Proton, using the native binary first for setup can be a reliable alternative. To use it:
 > 1. Make it executable with `chmod +x Slipstream` and run with `./Slipstream`. 
 > 2. Run through the setup as usual.
 > 3. After it saves your `config.json`, it will display a confirmation message, as it cannot launch the Windows game directly. 
