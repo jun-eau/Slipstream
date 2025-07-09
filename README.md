@@ -4,7 +4,7 @@
 
 This project would not exist without the pioneering work of **LittleScripterBoy** on the original [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher). All credit for discovering the authentication flow and the original concept belongs entirely to him. Slipstream is a rewrite that builds upon the solid foundation he created, aiming to make the tool more accessible.
 
-## Key Benefits
+### Key Benefits
 
 *   **Integrate Anywhere**: Add Slipstream to Steam for its overlay and controller support, run it standalone, or integrate it with other game launchers like Playnite or Lutris.
 *   **Skip Epic Launcher**: Play Rocket League without the Epic Games Launcher running in the background.
@@ -15,16 +15,19 @@ This project would not exist without the pioneering work of **LittleScripterBoy*
 
 > **Prerequisites:** Rocket League must be installed and kept up-to-date using a game manager like the Epic Games Launcher or Heroic Games Launcher. Slipstream only *launches* the game; it does not install, update, or manage game files.
 
+1.  Go to the [**Releases** page](https://github.com/jun-eau/Slipstream/releases) and download the executable for your platform.
+2.  Place the downloaded file in a dedicated folder, as Slipstream will generate configuration files in the same directory.
+3.  Continue with the setup instructions for your operating system below.
+
 ### Windows Setup
 
 For the best experience, it's recommended to add Slipstream to Steam to get the overlay and controller support.
 
-1.  Go to the [**Releases** page](https://github.com/jun-eau/Slipstream/releases) and download `Slipstream.exe`.
-2.  **Run the Launcher**: Double-click `Slipstream.exe`.
-3.  **Locate Game File**: A file dialog will open. Navigate to your Rocket League installation and select `RocketLeague.exe` (usually in the `Binaries/Win64` folder).
-4.  **Log In to Epic Games**: Your browser will open. Log in to the Epic account you want to use.
-5.  **Get Authorization Code**: After logging in, you'll be redirected to a page with a 32-character `authorizationCode`. Copy this code.
-6.  **Enter Code**: Paste the code into the launcher's dialog box and click OK.
+1.  **Run the Launcher**: Double-click `Slipstream.exe`.
+2.  **Locate Game File**: A file dialog will open. Navigate to your Rocket League installation and select `RocketLeague.exe` (usually in the `Binaries/Win64` folder).
+3.  **Log In to Epic Games**: Your browser will open. Log in to the Epic account you want to use.
+4.  **Get Authorization Code**: After logging in, you'll be redirected to a page with a 32-character `authorizationCode`. Copy this code.
+5.  **Enter Code**: Paste the code into the launcher's dialog box and click OK.
 
 The game will now launch. A `config.json` file is created, so you won't have to repeat this.
 
@@ -37,33 +40,41 @@ The game will now launch. A `config.json` file is created, so you won't have to 
 
 The recommended method for Linux is to use the Windows version (`Slipstream.exe`) with Proton, as this provides the best compatibility with gamepads and the Steam Overlay.
 
-1.  **Download the Windows Version**: Get `Slipstream.exe` from the [Releases page](https://github.com/jun-eau/Slipstream/releases).
-2.  **Add to Steam**: In your Steam library, click **Add a Game** -> **Add a Non-Steam Game...** and select the `Slipstream.exe` file.
-3.  **Force Proton**: Right-click on Slipstream in Steam -> **Properties...** -> **Compatibility**. Check the box to **"Force the use of a specific Steam Play compatibility tool"** and choose the latest Proton version.
-4.  **Run and Configure**: Launch Slipstream from Steam. It will guide you through the one-time setup (locating `RocketLeague.exe`, browser login, etc.) just like on Windows.
+> For **Steam Deck users**: do this setup process in **Desktop Mode** to ensure the file browser and Epic login work; the game will appear in Gaming Mode after setup.
 
-Once configured, Slipstream will launch Rocket League correctly through Proton every time.
+1.  **Add to Steam**: In your Steam library, click **Add a Game** -> **Add a Non-Steam Game...** and select the `Slipstream.exe` file.
+2.  **Force Proton**: Right-click on Slipstream in Steam -> **Properties...** -> **Compatibility**. Check the box to **"Force the use of a specific Steam Play compatibility tool"** and choose the latest Proton version.
+3.  **Run and Configure**: Launch Slipstream from Steam. It will guide you through the one-time setup (locating `RocketLeague.exe`, browser login, etc.) just like on Windows.
 
-> **Using the Native Binary:** The native Linux binary is also provided. Its primary purpose is for initial setup without needing Steam, or for use with other tools like Lutris. To use it, make it executable with `chmod +x Slipstream` and run it with `./Slipstream`. After it saves your `config.json`, it will display a confirmation message, as it cannot launch the Windows game directly. You can then use `Slipstream.exe` with your preferred compatibility layer.
+Once configured, Slipstream will launch Rocket League correctly using Proton.
 
-## Updating Slipstream
+> **Using the Native Binary:** The native Linux binary is also provided. Its primary purpose is for initial setup without needing Steam/Proton running, or for use with other tools like Lutris. If you're having trouble with the in-game browser or file picker under Proton, using the native binary first for setup can be a reliable alternative. To use it:
+> 1. Make it executable with `chmod +x Slipstream` and run with `./Slipstream`. 
+> 2. Run through the setup as usual.
+> 3. After it saves your `config.json`, it will display a confirmation message, as it cannot launch the Windows game directly. 
+> 4. You can then use `Slipstream.exe` with your preferred compatibility layer. Ensure it is in the same directory as `config.json`.
+
+## Usage & Configuration
+
+### Updating Slipstream
 
 Replace your current Slipstream executable with the latest one from the [Releases page](https://github.com/jun-eau/Slipstream/releases).
 
-## Custom Launch Options
+### Custom Launch Options
 
-Add Rocket League launch options (e.g., `-nomovie -high`) via Steam:
+Add Rocket League launch options via Steam:
 
 1.  In Steam, right-click Slipstream -> **Properties...**
 2.  Under the **General** tab, find **Launch Options**.
 3.  Enter options, space-separated (e.g., `-nomovie -high -USEALLAVAILABLECORES`). Slipstream forwards these to the game.
 
-## Using Multiple Accounts
+This should also work well with other launchers.
+
+### Using Multiple Accounts
 
 1.  Create a **new, separate folder** for each additional account.
 2.  Copy the Slipstream executable into each new folder.
-3.  Run it from the new folder and complete the first-time setup for that account.
-    Each folder will have its own `config.json`, keeping accounts isolated. Create separate Steam library entries for each.
+3.  Run it from the new folder and complete the first-time setup for that account. Each folder will have its own `config.json`, keeping accounts isolated. If using Steam, create separate library entries for each.
 
 ## Building from Source
 
