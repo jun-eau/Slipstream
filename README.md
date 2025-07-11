@@ -76,6 +76,26 @@ This should also work well with other launchers.
 2.  Copy the Slipstream executable into each new folder.
 3.  Run it from the new folder and complete the first-time setup for that account. Each folder will have its own `config.json`, keeping accounts isolated. If using Steam, create separate library entries for each.
 
+## FAQ & Troubleshooting
+
+#### Q: Do I still need the Epic Games Launcher installed?
+Yes. The Epic Launcher is still required for installing and updating the game. The main benefit of Slipstream is that you never have to actually run or interact with the launcher for gameplay sessions.
+
+#### Q: Does this improve my in-game FPS or performance?
+It can make the game boot faster, but it should not have any impact on your in-game performance (your FPS) one way or the other.
+
+#### Q: What's the difference between this and using Heroic or Legendary?
+Heroic and Legendary are intended to manage and interface with entire game libraries. Slipstream is a more minimal, standalone tool with a very specific goal: to be the simplest possible method to get Rocket League running directly through another launcher like Steam, without any other dependencies.
+
+#### Q: Does Slipstream modify my game files in any way?
+Not at all. Slipstream is a separate executable that should be kept in its own folder. It only reads your game path to launch the game; it never writes to or alters your game installation.
+
+#### Q: I'm getting a "version mismatch" error when I try to play online.
+This almost always means your game is out of date. Since Slipstream bypasses the launcher, it also bypasses the automatic update check. Run the Epic Games Launcher or Heroic to make sure Rocket League is fully updated, then try launching with Slipstream again.
+
+#### Q: Does this work with BakkesMod?
+Not at this time. BakkesMod support is the most requested feature and is currently being looked at for a future release.
+
 ## Building from Source
 
 If you prefer to compile the application yourself, you will need the **Go toolchain** (version 1.24 or newer) installed on your system.
