@@ -71,6 +71,8 @@ BakkesMod is a Windows application, so it runs within Wine/Proton.
 
 **If "Mod is out of date, waiting for an update" appears:** In the BakkesMod window (once running with Rocket League), go to "Settings", uncheck "Enable safe mode", and click "Yes" on the warning.
 
+> BakkesMod on Steam Deck in Gaming Mode still requires some testing. If you have problems, please post an [issue](https://github.com/jun-eau/Slipstream/issues).
+
 For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Installation/Setup sections).
 </details>
 
