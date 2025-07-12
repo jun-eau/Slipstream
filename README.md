@@ -8,6 +8,7 @@ This project would not exist without the work of **LittleScripterBoy** on the or
 
 *   **Integrate Anywhere**: Add Slipstream to Steam for its overlay and controller support, run it standalone, or integrate it with other game launchers like Playnite or Lutris.
 *   **Skip Epic Launcher**: Play Rocket League without the Epic Games Launcher running in the background.
+*   **Optional BakkesMod Launching**: Automatically launch BakkesMod with the game.
 *   **Simple Multi-Account Support**: Easily switch between multiple Epic Games accounts.
 *   **No Dependencies**: Download and run a single executable; no Python or other libraries needed.
 
@@ -54,6 +55,34 @@ Once configured, Slipstream will launch Rocket League correctly using Proton.
 > 3. After it saves your `config.json`, it will display a confirmation message, as it cannot launch the Windows game directly. 
 > 4. You can then use `Slipstream.exe` with your preferred compatibility layer. Ensure it is in the same directory as `config.json`.
 
+<details>
+<summary><strong>Optional: BakkesMod Setup</strong></summary>
+
+Slipstream can automatically launch BakkesMod alongside Rocket League. If you choose to enable this feature during the initial setup, you'll be prompted for the location of your BakkesMod executable.
+
+**Windows:**
+1. If you haven't already, download and run the official BakkesMod installer from the [BakkesMod website](https://bakkesmod.com/).
+2. Complete the BakkesMod installation.
+3. When Slipstream runs for the first time (or if `config.json` is reset), it will ask if you want to enable BakkesMod. If you click "Yes", it will then ask you to locate `BakkesMod.exe`. This is usually found in `C:\Program Files\BakkesMod\BakkesMod.exe`.
+
+**Linux (using Wine/Proton):**
+BakkesMod is a Windows application, so you'll need to install and run it within your Wine/Proton environment.
+1. Download `BakkesModSetup.exe` from the [BakkesMod website](https://bakkesmod.com/).
+2. Install BakkesMod using your compatibility layer:
+    * **Proton (via Steam):** The easiest way is to add `BakkesModSetup.exe` as a non-Steam game to your Steam library. Right-click it, go to Properties -> Compatibility, and force it to use the same Proton version you use for Slipstream/Rocket League. Run it once to install BakkesMod.
+    * **Wine (standalone):** Open a terminal and run `wine /path/to/BakkesModSetup.exe`.
+3. During the Slipstream setup, when prompted for the BakkesMod path, you'll need to point it to the `BakkesMod.exe` that was installed within your Wine/Proton prefix.
+    * The path will look something like: `~/.wine/drive_c/Program Files/BakkesMod/BakkesMod.exe` (for default Wine) or inside a Steam Proton prefix (e.g., `~/.steam/steam/steamapps/compatdata/YOUR_SLIPSTREAM_ID/pfx/drive_c/Program Files/BakkesMod/BakkesMod.exe`).
+4. **Important Final Step:** After BakkesMod is running with Rocket League:
+    * Press `F2` in-game to open the BakkesMod menu.
+    * Go to the "Settings" tab.
+    * Uncheck the "Enable safe mode" option.
+    * A warning prompt will appear; click "Yes" to confirm. BakkesMod may need to restart/re-inject.
+
+For more detailed Linux guidance, especially for finding Wine/Proton prefixes or troubleshooting, refer to the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux). Focus on the "Installation" section for running `BakkesModSetup.exe` and the "Running BakkesMod" > "Manually" section for finding `BakkesMod.exe` and the safe mode instructions. Adapt paths according to your specific Wine/Proton setup.
+
+</details>
+
 ## Usage & Configuration
 
 ### Updating Slipstream
@@ -94,7 +123,7 @@ Not at all. Slipstream is a separate executable that should be kept in its own f
 This almost always means your game is out of date. Since Slipstream bypasses the launcher, it also bypasses the automatic update check. Run the Epic Games Launcher or Heroic to make sure Rocket League is fully updated, then try launching with Slipstream again.
 
 #### Q: Does this work with BakkesMod?
-Not at this time. BakkesMod support is the most requested feature and is currently being looked at for a future release.
+Yes! Slipstream now includes optional support for automatically launching BakkesMod. During the first-time setup, you will be asked if you want to enable it. If you say yes, you will be prompted to select your `BakkesMod.exe` file. For detailed instructions, please see the "Optional: BakkesMod Setup" section in this README.
 
 ## Building from Source
 
