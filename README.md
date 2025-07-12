@@ -28,7 +28,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
         *   **Native Linux Binary**: `chmod +x Slipstream && ./Slipstream`. Use this for initial setup if Proton causes issues, or for use with tools like Lutris. It will save `config.json` but cannot launch the Windows game directly. Then use `Slipstream.exe` via Proton/Wine from the same folder.
 4.  **Initial Configuration (One-Time Setup)**:
     *   **Locate Game**: A file dialog will prompt for `RocketLeague.exe` (usually in `Binaries/Win64` of your Rocket League installation).
-    *   **BakkesMod (Optional)**: If you enable BakkesMod, you'll be prompted for `BakkesMod.exe`. See [Optional: BakkesMod Setup](#optional-bakkesmod-setup) for details.
+    *   **BakkesMod (Optional)**: If you enable BakkesMod, you'll be prompted for `BakkesMod.exe`. See "Optional: BakkesMod Setup" under Usage for details.
     *   **Epic Games Login**: Your browser will open. Log in to your Epic Games account.
     *   **Authorization Code**: Copy the 32-character `authorizationCode` from the redirected page.
     *   **Enter Code**: Paste the code into Slipstream's dialog and click OK.
