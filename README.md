@@ -69,9 +69,9 @@ BakkesMod is a Windows application, so it runs within Wine/Proton.
     * **Wine (standalone):** `wine /path/to/BakkesModSetup.exe`.
 3. Point Slipstream to the installed `BakkesMod.exe` within your Wine/Proton prefix (e.g., `~/.wine/drive_c/Program Files/BakkesMod/BakkesMod.exe` or `~/.steam/steam/steamapps/compatdata/<AppID>/pfx/drive_c/Program Files/BakkesMod/BakkesMod.exe`).
 
-**If "Mod is out of date, waiting for an update" appears:** In the BakkesMod window (once running with Rocket League), go to "Settings", uncheck "Enable safe mode", and click "Yes" on the warning.
+> **If "Mod is out of date, waiting for an update" appears:** In the BakkesMod window (once running with Rocket League), go to "Settings", uncheck "Enable safe mode", and click "Yes" on the warning.
 
-> BakkesMod on Steam Deck in Gaming Mode still requires some testing. If you have problems, please post an [issue](https://github.com/jun-eau/Slipstream/issues).
+> **BakkesMod on Steam Deck in Gaming Mode still requires some testing.** If you have problems, please post an [issue](https://github.com/jun-eau/Slipstream/issues).
 
 For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Installation/Setup sections).
 </details>
