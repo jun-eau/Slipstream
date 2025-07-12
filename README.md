@@ -26,9 +26,10 @@ For the best experience, it's recommended to add Slipstream to Steam to get the 
 
 1.  **Run the Launcher**: Double-click `Slipstream.exe`.
 2.  **Locate Game File**: A file dialog will open. Navigate to your Rocket League installation and select `RocketLeague.exe` (usually in the `Binaries/Win64` folder).
-3.  **Log In to Epic Games**: Your browser will open. Log in to the Epic account you want to use.
-4.  **Get Authorization Code**: After logging in, you'll be redirected to a page with a 32-character `authorizationCode`. Copy this code.
-5.  **Enter Code**: Paste the code into the launcher's dialog box and click OK.
+3.  **Locate BakkesMod File**: If desired, enable BakkesMod and locate your `BakkesMod.exe` file (usually found in `C:\Program Files\BakkesMod\BakkesMod.exe`). See [Optional: BakkesMod Setup](https://github.com/jun-eau/Slipstream?tab=readme-ov-file#optional-bakkesmod-setup) for more details.
+4.  **Log In to Epic Games**: Your browser will open. Log in to the Epic account you want to use.
+5.  **Get Authorization Code**: After logging in, you'll be redirected to a page with a 32-character `authorizationCode`. Copy this code.
+6.  **Enter Code**: Paste the code into the launcher's dialog box and click OK.
 
 The game will now launch. A `config.json` file is created, so you won't have to repeat this.
 
