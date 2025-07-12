@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"time" // Added for BakkesMod launch delay
 
 	"github.com/google/uuid"
 	"github.com/ncruces/zenity"
@@ -36,8 +37,12 @@ const (
 
 // Config holds all application settings.
 type Config struct {
-	RocketLeaguePath string `json:"rocket_league_path"`
-	EpicToken        string `json:"epic_token,omitempty"`
+	RocketLeaguePath       string `json:"rocket_league_path"`
+	EpicToken              string `json:"epic_token,omitempty"`
+	BakkesModEnabled       bool   `json:"bakkesmod_enabled"` // No omitempty, so it defaults to false in JSON
+	BakkesModPath          string `json:"bakkesmod_path,omitempty"`
+	BakkesModLaunchDelay   int    `json:"bakkesmod_launch_delay,omitempty"`
+	BakkesModSetupDeclined bool   `json:"bakkesmod_setup_declined"` // No omitempty, so it defaults to false
 }
 
 // LaunchCredentials holds the final codes needed to start the game.
@@ -116,7 +121,8 @@ func main() {
 	// 4. Launch Rocket League with the obtained credentials and any extra args.
 	log.Println("Successfully authenticated. Launching Rocket League...")
 	// os.Args[0] is the program name, os.Args[1:] is all subsequent arguments.
-	if err := launchGame(cfg.RocketLeaguePath, creds, os.Args[1:]); err != nil {
+	// Updated to pass the full cfg object
+	if err := launchGame(cfg, creds, os.Args[1:]); err != nil {
 		detailedMsg := "Failed to Launch Rocket League.\n\n" +
 			"Please ensure the Rocket League path is correctly set in 'config.json' and that the game executable is not missing or corrupted.\n\n" +
 			"Details: " + err.Error()
@@ -192,37 +198,68 @@ func (a *Authenticator) GetLaunchCredentials(currentToken string) (LaunchCredent
 
 // launchGame starts the game with the provided credentials and arguments.
 // On Linux, it detects if the target is a Windows executable and guides the user.
-func launchGame(path string, creds LaunchCredentials, extraArgs []string) error {
-	// On Linux, we can't directly execute a Windows .exe.
-	// Instead of failing with a cryptic error, we'll guide the user.
-	if runtime.GOOS == "linux" && strings.HasSuffix(strings.ToLower(path), ".exe") {
+// The function signature now takes the full Config object.
+func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
+	// 1. Preserve existing Linux .exe check.
+	// This ensures the "Setup Complete" message appears correctly on Linux
+	// before any launch attempt is made.
+	if runtime.GOOS == "linux" && strings.HasSuffix(strings.ToLower(cfg.RocketLeaguePath), ".exe") {
 		showInfo("Setup Complete!",
 			"Your configuration and login token have been successfully saved to 'config.json'.\n\n"+
 				"To play, please add 'Slipstream.exe' (the Windows version) to Steam or Lutris and run it using Proton or Wine. "+
 				"It will use the config file you just created.")
-		// We return 'nil' because this is an expected outcome, not an application error.
-		return nil
+		return nil // Expected outcome on Linux with .exe path
 	}
 
-	args := []string{
+	// 2. Launch Rocket League (asynchronously).
+	log.Println("Launching Rocket League...")
+	rlArgs := []string{
 		"-AUTH_LOGIN=unused",
 		"-AUTH_PASSWORD=" + creds.ExchangeCode,
 		"-AUTH_TYPE=exchangecode",
 		"-epicapp=Sugar",
 		"-epicenv=Prod",
 		"-EpicPortal",
-		"-epicusername=\"\"",
+		"-epicusername=\"\"", // Intentionally empty as per original args
 		"-epicuserid=" + creds.AccountID,
 	}
+	rlArgs = append(rlArgs, extraArgs...)
+	rlCmd := exec.Command(cfg.RocketLeaguePath, rlArgs...)
 
-	// Append the extra launch options from Steam.
-	args = append(args, extraArgs...)
-
-	cmd := exec.Command(path, args...)
-	if err := cmd.Start(); err != nil {
-		return fmt.Errorf("could not start the game executable at:\n%s\n\nError: %w\n\nPlease ensure the path is correct in %s", path, err, configFileName)
+	if err := rlCmd.Start(); err != nil {
+		return fmt.Errorf("failed to start Rocket League at %s: %w", cfg.RocketLeaguePath, err)
 	}
-	return nil
+	log.Println("Rocket League process started.")
+
+	// 3. Conditional BakkesMod Launch.
+	if !cfg.BakkesModEnabled || cfg.BakkesModPath == "" {
+		log.Println("BakkesMod is not enabled or path is not set. Launch complete.")
+		return nil // Standard launch finished successfully.
+	}
+
+	// 4. Execute BakkesMod launch sequence.
+	// We need to import "time" for this. Ensure it's added if not already.
+	// (It should be, due to existing logging, but good to double check)
+	delay := time.Duration(cfg.BakkesModLaunchDelay) * time.Second
+	log.Printf("BakkesMod is enabled. Waiting for %v before launching...", delay)
+	time.Sleep(delay) // Requires "time" package
+
+	log.Println("Launching BakkesMod...")
+	bmCmd := exec.Command(cfg.BakkesModPath) // No arguments needed for BakkesMod.exe
+	if err := bmCmd.Start(); err != nil {
+		// Inform the user but do not treat it as a fatal error for the game itself.
+		errorMsg := fmt.Sprintf(
+			"Could not start BakkesMod.exe at the specified path:\n\n%s\n\nError: %v\n\nRocket League should still be running.",
+			cfg.BakkesModPath, err,
+		)
+		showError("BakkesMod Launch Failed", errorMsg)
+		log.Printf("Error launching BakkesMod: %v", err)
+		// Non-fatal error, Rocket League is (presumably) running.
+	} else {
+		log.Println("BakkesMod process started.")
+	}
+
+	return nil // Two-process launch sequence finished (or attempted).
 }
 
 // --- Authentication Steps ---
@@ -335,7 +372,7 @@ func loadConfig() (Config, error) {
 	// If the path is missing, always prompt for it.
 	if cfg.RocketLeaguePath == "" {
 		showInfo("Rocket League Path Setup", "Please locate your Rocket League executable (e.g., RocketLeague.exe). This will only be asked once.")
-		selectedPath, err := zenity.SelectFile(
+		rlPath, err := zenity.SelectFile(
 			zenity.Title("Select Rocket League Executable"),
 			zenity.FileFilters{
 				{Name: "Rocket League Executable", Patterns: []string{"RocketLeague.exe", "RocketLeague"}, CaseFold: true},
@@ -343,13 +380,71 @@ func loadConfig() (Config, error) {
 			},
 		)
 		if err != nil {
-			return cfg, fmt.Errorf("you must select a path to continue")
+			return cfg, fmt.Errorf("you must select a Rocket League path to continue")
 		}
-		cfg.RocketLeaguePath = selectedPath
+		cfg.RocketLeaguePath = rlPath
+		// Save immediately after getting RL path, so it's there before BM setup
 		if err := saveConfig(cfg); err != nil {
-			return cfg, fmt.Errorf("could not save the configuration file: %w", err)
+			// Log or show error, but try to continue to BM setup if possible
+			log.Printf("Warning: could not save Rocket League path: %v", err)
 		}
 	}
+
+	// BakkesMod Setup Prompt - only if RL path is set and BM not already configured or declined
+	if cfg.RocketLeaguePath != "" && cfg.BakkesModPath == "" && !cfg.BakkesModSetupDeclined {
+		log.Println("Prompting for BakkesMod setup.")
+		err := zenity.Question("Would you like to enable automatic launching for BakkesMod?",
+			zenity.Title("BakkesMod Setup"),
+			zenity.DefaultCancel(), // Makes "No" the default if user just closes dialog
+			zenity.OKLabel("Yes"),
+			zenity.CancelLabel("No"),
+		)
+
+		if err == nil { // User clicked "Yes"
+			log.Println("User opted to set up BakkesMod.")
+			bmPath, err := zenity.SelectFile(
+				zenity.Title("Select BakkesMod.exe"),
+				zenity.FileFilters{
+					{Name: "BakkesMod Executable", Patterns: []string{"BakkesMod.exe"}, CaseFold: true},
+					{Name: "All Files", Patterns: []string{"*"}},
+				},
+			)
+			if err == nil && bmPath != "" {
+				log.Printf("BakkesMod path selected: %s", bmPath)
+				cfg.BakkesModPath = bmPath
+				cfg.BakkesModEnabled = true
+				if cfg.BakkesModLaunchDelay == 0 { // Set default delay if not already set by user
+					cfg.BakkesModLaunchDelay = 5
+				}
+				cfg.BakkesModSetupDeclined = false // Ensure this is false if they just set it up
+			} else {
+				log.Println("User did not select a BakkesMod path or cancelled.")
+				// User cancelled BakkesMod selection, treat as "No" for this session, but don't set Declined.
+				// They might want to try again next time.
+				// If we want to treat this as a permanent "No", we'd set BakkesModSetupDeclined = true here.
+				// For now, let's assume cancelling file dialog means they don't want it *now*.
+			}
+		} else { // User clicked "No" or closed the dialog
+			log.Println("User declined BakkesMod setup.")
+			cfg.BakkesModSetupDeclined = true
+			cfg.BakkesModEnabled = false // Ensure it's disabled if they decline
+		}
+		// Save config after BM interaction (or lack thereof)
+		if err := saveConfig(cfg); err != nil {
+			return cfg, fmt.Errorf("could not save BakkesMod configuration: %w", err)
+		}
+	}
+
+	// Ensure default launch delay if enabled and not set
+	if cfg.BakkesModEnabled && cfg.BakkesModLaunchDelay == 0 {
+		log.Println("BakkesMod enabled but launch delay is 0, setting to default (5s).")
+		cfg.BakkesModLaunchDelay = 5
+		if err := saveConfig(cfg); err != nil {
+			// Log this, but it's not critical enough to halt the app
+			log.Printf("Warning: could not save default BakkesMod launch delay: %v", err)
+		}
+	}
+
 	return cfg, nil
 }
 
