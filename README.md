@@ -90,9 +90,6 @@ No. It only reads your game path to launch the game.
 
 #### Q: "Version mismatch" error online?
 Your game is likely outdated. Update Rocket League via Epic Games Launcher or Heroic, then try Slipstream again.
-
-#### Q: Does this work with BakkesMod?
-Yes! See the [Optional: BakkesMod Setup](#optional-bakkesmod-setup) section.
 </details>
 
 <details>
