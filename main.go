@@ -21,6 +21,8 @@ import (
 
 // --- Constants ---
 const (
+	currentVersion = "v1.5.1"
+
 	// API Configuration
 	epicAPIURL       = "https://account-public-service-prod.ak.epicgames.com/account/api"
 	epicLauncherAuth = "basic MzRhMDJjZjhmNDQxNGUyOWIxNTkyMTg3NmRhMzZmOWE6ZGFhZmJjY2M3Mzc3NDUwMzlkZmZlNTNkOTRmYzc2Y2Y="
@@ -43,6 +45,7 @@ type Config struct {
 	BakkesModPath          string `json:"bakkesmod_path,omitempty"`
 	BakkesModLaunchDelay   int    `json:"bakkesmod_launch_delay,omitempty"`
 	BakkesModSetupDeclined bool   `json:"bakkesmod_setup_declined"` // No omitempty, so it defaults to false
+	LastNotifiedVersion    string `json:"last_notified_version,omitempty"`
 }
 
 // LaunchCredentials holds the final codes needed to start the game.
@@ -131,6 +134,96 @@ func main() {
 	}
 
 	log.Println("Game process started successfully.")
+
+	// 5. Check for updates in the background.
+	// Pass a pointer to cfg so the goroutine can modify it
+	go checkForUpdates(&cfg)
+
+}
+
+// --- Update Checker ---
+
+// GitHubRelease represents the structure of a release from the GitHub API.
+type GitHubRelease struct {
+	TagName string `json:"tag_name"`
+}
+
+// isNewerVersion compares two version strings (e.g., "v1.5.1", "v1.6.0").
+// It returns true if the latest version is newer than the current version.
+func isNewerVersion(current, latest string) bool {
+	// Simple string comparison works for "vX.Y.Z" format
+	return strings.TrimPrefix(latest, "v") > strings.TrimPrefix(current, "v")
+}
+
+// checkForUpdates fetches the latest release from GitHub and notifies the user if it's a new version.
+// It runs in a goroutine to avoid blocking the main application flow.
+func checkForUpdates(cfg *Config) {
+	log.Println("Checking for application updates...")
+	// Use a longer timeout for the update check
+	client := &http.Client{Timeout: 10 * time.Second}
+	resp, err := client.Get("https://api.github.com/repos/jun-eau/Slipstream/releases/latest")
+	if err != nil {
+		log.Printf("Update check failed (network error): %v", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		log.Printf("Update check failed (status code: %d)", resp.StatusCode)
+		return
+	}
+
+	var release GitHubRelease
+	if err := json.NewDecoder(resp.Body).Decode(&release); err != nil {
+		log.Printf("Update check failed (JSON parsing error): %v", err)
+		return
+	}
+
+	latestVersion := release.TagName
+	log.Printf("Current version: %s, Latest version: %s", currentVersion, latestVersion)
+
+	if isNewerVersion(currentVersion, latestVersion) {
+		log.Printf("A new version is available: %s", latestVersion)
+		// Check if we've already notified the user about this specific version
+		if cfg.LastNotifiedVersion != latestVersion {
+			log.Println("Notifying user about the new version.")
+			// Use a separate function to show the dialog to keep this clean
+			showUpdateNotification(latestVersion)
+
+			// Update the config and save it
+			cfg.LastNotifiedVersion = latestVersion
+			if err := saveConfig(*cfg); err != nil {
+				log.Printf("Warning: failed to save last notified version: %v", err)
+			}
+		} else {
+			log.Printf("Already notified user about version %s. Skipping.", latestVersion)
+		}
+	} else {
+		log.Println("Application is up to date.")
+	}
+}
+
+// showUpdateNotification displays the update dialog to the user.
+func showUpdateNotification(version string) {
+	message := fmt.Sprintf(
+		"A new version of Slipstream is available!\n\n"+
+			"You are on version: %s\n"+
+			"The latest version is: %s\n\n"+
+			"You can download the new version from the releases page.",
+		currentVersion, version,
+	)
+	// We use a goroutine for the dialog itself to prevent any potential blocking
+	// on the main update goroutine, although it's generally not an issue with zenity.
+	go func() {
+		err := zenity.Info(message,
+			zenity.Title("Update Available"),
+			zenity.ExtraButton("Open Download Page"),
+			zenity.InfoIcon,
+		)
+		if err == zenity.ErrExtraButton {
+			openBrowser("https://github.com/jun-eau/Slipstream/releases")
+		}
+	}()
 }
 
 // --- Core Functions ---
