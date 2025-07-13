@@ -221,7 +221,7 @@ func showUpdateNotification(version string) {
 			zenity.InfoIcon,
 		)
 		if err == zenity.ErrExtraButton {
-			openBrowser("https://github.com/jun-eau/Slipstream/releases")
+			openBrowser("https://github.com/jun-eau/Slipstream/releases/latest")
 		}
 	}()
 }
