@@ -42,7 +42,7 @@ The game will launch. Your settings are saved in `config.json` in the Slipstream
 
 ## Usage
 
-*   **Updating Slipstream**: Replace your Slipstream executable with the latest from [Releases](https://github.com/jun-eau/Slipstream/releases). Your `config.json` will be preserved.
+*   **Updating Slipstream**: Slipstream will automatically notify about and link to new releases. Replace your Slipstream executable with the [latest release](https://github.com/jun-eau/Slipstream/releases/latest). Your `config.json` will be preserved.
 *   **Custom Launch Options**:
     1.  In Steam, right-click Slipstream -> **Properties...**
     2.  Under **General**, enter options in **Launch Options** (e.g., `-nomovie -high`). These are passed to Rocket League.
