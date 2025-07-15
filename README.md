@@ -24,8 +24,8 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
         *   **Steam Deck users must do this in Desktop Mode.**
         *   If the recommended method fails, use the native Linux binary (`chmod +x Slipstream && ./Slipstream`) to run the initial setup first.
 4.  **Initial Configuration (One-Time Setup)**:
-    *   **Locate Files:** The app will prompt you to select `RocketLeague.exe`. If you enable BakkesMod, it will also prompt for `BakkesMod.exe`.
-    *   **Epic Games Login:** Your browser will open to log in. Copy the 32-character `authorizationCode` from the final page and paste it into Slipstream's dialog (see "Optional: BakkesMod Setup" under Usage for more details).
+    *   **Locate Files:** The app will prompt you to select `RocketLeague.exe`. If you enable BakkesMod, it will also prompt for `BakkesMod.exe` (see "Optional: BakkesMod Setup" under Usage for more details).
+    *   **Epic Games Login:** Your browser will open to log in. Copy the 32-character `authorizationCode` from the final page and paste it into Slipstream's dialog.
 
 The game will launch, and your settings will be saved in the `config.json` file.
 
