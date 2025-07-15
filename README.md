@@ -16,24 +16,18 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 
 > **Prerequisite:** Rocket League must be installed and kept up-to-date via a game manager (e.g., Epic Games Launcher, Heroic Games Launcher). Slipstream only *launches* the game.
 
-1.  **Download**: Go to the [**Releases page**](https://github.com/jun-eau/Slipstream/releases) and download the executable for your platform.
+1.  **Download**: Go to the [**Releases page**](https://github.com/jun-eau/Slipstream/releases/latest) and download the executable for your platform.
 2.  **Create a Folder**: Place the downloaded file in a new, dedicated folder. Slipstream will store its configuration file (`config.json`) there.
 3.  **Run Slipstream**:
     *   **Windows**: Double-click `Slipstream.exe`.
-    *   **Linux**:
-        *   **Recommended (Proton/Steam)**:
-            1.  Add `Slipstream.exe` to Steam as a non-Steam game.
-            2.  In Steam, right-click Slipstream -> Properties -> Compatibility -> Force Proton (latest version).
-            3.  **Steam Deck Users**: Perform this setup in **Desktop Mode**.
-        *   **Native Linux Binary**: `chmod +x Slipstream && ./Slipstream`. Use this for initial setup if Proton causes issues. It will save `config.json` but cannot launch the Windows game directly. Then use `Slipstream.exe` via Proton/Wine from the same folder.
+    *   **Linux**: The recommended method is to add `Slipstream.exe` to Steam as a non-Steam game and force the latest Proton version in its compatibility settings.
+        *   **Steam Deck users must do this in Desktop Mode.**
+        *   If the recommended method fails, use the native Linux binary (`chmod +x Slipstream && ./Slipstream`) to run the initial setup first.
 4.  **Initial Configuration (One-Time Setup)**:
-    *   **Locate Game**: A file dialog will prompt for `RocketLeague.exe` (usually in `Binaries/Win64` of your Rocket League installation).
-    *   **BakkesMod (Optional)**: If you enable BakkesMod, you'll be prompted for `BakkesMod.exe`. See "Optional: BakkesMod Setup" under Usage for details.
-    *   **Epic Games Login**: Your browser will open. Log in to your Epic Games account.
-    *   **Authorization Code**: Copy the 32-character `authorizationCode` from the redirected page.
-    *   **Enter Code**: Paste the code into Slipstream's dialog and click OK.
+    *   **Locate Files:** The app will prompt you to select `RocketLeague.exe`. If you enable BakkesMod, it will also prompt for `BakkesMod.exe`.
+    *   **Epic Games Login:** Your browser will open to log in. Copy the 32-character `authorizationCode` from the final page and paste it into Slipstream's dialog.
 
-The game will launch. Your settings are saved in `config.json` in the Slipstream folder.
+The game will launch, and your settings will be saved in the `config.json` file.
 
 **To add Slipstream to Steam (Windows & Linux/Proton):**
 1. In Steam: **Add a Game** -> **Add a Non-Steam Game...**
@@ -42,14 +36,14 @@ The game will launch. Your settings are saved in `config.json` in the Slipstream
 
 ## Usage
 
-*   **Updating Slipstream**: Slipstream will automatically notify about and link to new releases. Replace your Slipstream executable with the [latest release](https://github.com/jun-eau/Slipstream/releases/latest). Your `config.json` will be preserved.
+*   **Updating Slipstream**: Slipstream will automatically notify you about new versions. To update, simply replace your executable with the latest one from the [Releases page](https://github.com/jun-eau/Slipstream/releases/latest). Your `config.json` is preserved.
 *   **Custom Launch Options**:
     1.  In Steam, right-click Slipstream -> **Properties...**
     2.  Under **General**, enter options in **Launch Options** (e.g., `-nomovie -high`). These are passed to Rocket League.
 *   **Multiple Accounts**:
     1.  Create a **new, separate folder** for each account.
     2.  Copy the Slipstream executable into each new folder.
-    3.  Run it from the new folder for that account's first-time setup. Each folder gets its own `config.json`.
+    3.  Run it from the new folder for that account's first-time setup.
     4.  If using Steam, add each Slipstream instance as a separate non-Steam game.
 
 <details>
@@ -71,7 +65,7 @@ BakkesMod is a Windows application, so it runs within Wine/Proton.
 
 > **If "Mod is out of date, waiting for an update" appears:** In the BakkesMod window (once running with Rocket League), go to "Settings", uncheck "Enable safe mode", and click "Yes" on the warning.
 
-> BakkesMod on Steam Deck in Gaming Mode may require navigating windows (using the `Steam` button).
+> **Steam Deck Users:** Navigating the BakkesMod window in Gaming Mode may require using the `Steam` button to access window controls.
 
 For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Installation/Setup sections).
 </details>
@@ -85,14 +79,11 @@ Yes, for installing and updating Rocket League. Slipstream lets you play without
 #### Q: Does this improve in-game FPS?
 It can speed up game boot time but shouldn't affect in-game FPS.
 
-#### Q: Difference from Heroic/Legendary?
+#### Q: What's the difference between this and Heroic/Legendary?
 Slipstream is minimal, focused only on launching Rocket League via other launchers (like Steam) without extra dependencies. Heroic/Legendary manage entire game libraries.
 
 #### Q: Does Slipstream modify game files?
 No. It only reads your game path to launch the game.
-
-#### Q: "Version mismatch" error online?
-Your game is likely outdated. Update Rocket League via Epic Games Launcher or Heroic, then try Slipstream again.
 </details>
 
 <details>
