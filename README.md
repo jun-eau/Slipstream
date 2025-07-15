@@ -6,7 +6,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 
 ### Key Benefits
 
-*   **Integrate Anywhere**: Use with Steam (for overlay and controller support), standalone, or with other launchers like Playnite or Lutris.
+*   **Launch From Anywhere**: Use with Steam (for overlay and controller support), standalone, or with other launchers like Playnite or Lutris.
 *   **Skip Epic Launcher**: Play Rocket League without the Epic Games Launcher running.
 *   **Optional BakkesMod**: Automatically launch BakkesMod (Windows & Linux).
 *   **Simple Multi-Account**: Easily switch between Epic Games accounts.
