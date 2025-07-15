@@ -1,0 +1,50 @@
+# .github/workflows/release.yml
+
+name: Release Build
+
+# This workflow runs only when a new release is published.
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    name: Build Release Binaries
+    runs-on: ubuntu-latest # Use a standard Linux environment to build
+
+    steps:
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x' # Match project's Go version
+
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Build for Windows
+        # Cross-compiles the Windows .exe
+        run: GOOS=windows GOARCH=amd64 go build -o Slipstream.exe .
+
+      - name: Build for Linux
+        # Compiles the Linux binary
+        run: GOOS=linux GOARCH=amd64 go build -o Slipstream .
+
+      - name: Upload Windows Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./Slipstream.exe
+          asset_name: Slipstream.exe
+          asset_content_type: application/vnd.microsoft.portable-executable
+
+      - name: Upload Linux Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./Slipstream
+          asset_name: Slipstream
+          asset_content_type: application/octet-stream
