@@ -67,7 +67,7 @@ BakkesMod is a Windows application, so it runs within Wine/Proton.
 
 > **Steam Deck Users:** Navigating the BakkesMod window in Gaming Mode may require using the `Steam` button to access window controls.
 
-For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Installation/Setup sections).
+For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Setup/Installation sections).
 </details>
 
 <details>
