@@ -1,4 +1,4 @@
-# Slipstream
+# Slipstream: A Rocket League Launcher
 
 Slipstream is a standalone, cross-platform app that launches the Epic Games version of Rocket League **without the Epic Games Launcher**.
 
