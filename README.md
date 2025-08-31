@@ -6,11 +6,11 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 
 ### Key Benefits
 
-*   **Launch From Anywhere**: Use with Steam (for overlay and controller support), standalone, or with other launchers like Playnite or Lutris.
-*   **Skip Epic Launcher**: Play Rocket League without the Epic Games Launcher running.
-*   **Optional BakkesMod**: Automatically launch BakkesMod (Windows & Linux).
-*   **Simple Multi-Account**: Easily switch between Epic Games accounts.
-*   **No Dependencies**: Single executable, no external libraries needed.
+*   **Integrate with Steam**: Seamlessly add the Epic Games version of Rocket League to Steam. Enables full support for the Steam Overlay, controller configurations, and the Steam Deck.
+*   **Skip the Epic Launcher**: Play Rocket League without the Epic Launcher running. Perfect for standalone use or with other launchers like Playnite and Lutris.
+*   **Optional BakkesMod**: Automatically launch BakkesMod with Rocket League (Windows & Linux).
+*   **Simple Multi-Account**: Easily switch between Epic accounts in Rocket League.
+*   **No Dependencies**: A single, dependency-free executable.
 
 ## Installation & Setup
 
@@ -20,7 +20,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 2.  **Create a Folder**: Place the downloaded file in a new, dedicated folder. Slipstream will store its configuration file (`config.json`) there.
 3.  **Run Slipstream**:
     *   **Windows**: Double-click `Slipstream.exe`.
-    *   **Linux**: The recommended method is to add `Slipstream.exe` to Steam as a non-Steam game and force the latest Proton version in its compatibility settings.
+    *   **Linux / Steam Deck**: The recommended method is to add `Slipstream.exe` to Steam as a non-Steam game and force the latest Proton version in its compatibility settings.
         *   **Steam Deck users must do this in Desktop Mode.**
         *   If the recommended method fails, use the native Linux binary (`chmod +x Slipstream && ./Slipstream`) to run the initial setup first.
 4.  **Initial Configuration (One-Time Setup)**:
@@ -84,6 +84,12 @@ Slipstream is minimal, focused only on launching Rocket League via other launche
 
 #### Q: Does Slipstream modify game files?
 No. It only reads your game path to launch the game.
+
+#### Q: I'm getting a "version mismatch" error when I try to play online.
+This means your game is out of date. Since Slipstream bypasses the launcher, it also bypasses the automatic update check. Run the Epic Games Launcher or your launcher of choice to make sure Rocket League is fully updated, then try launching with Slipstream again.
+
+#### Q: My game is in the wrong language, how do I change it?
+The Epic Launcher normally passes a language argument to the game. You can do this yourself in Slipstream's launch options. To force English, add `-language=INT`. Other common codes include `DEU` (German), `FRA` (French), and `ESN` (Spanish).
 </details>
 
 <details>
