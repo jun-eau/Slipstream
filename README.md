@@ -67,7 +67,7 @@ BakkesMod is a Windows application, so it runs within Wine/Proton.
 
 > **Steam Deck Users:** Navigating the BakkesMod window in Gaming Mode may require using the `Steam` button to access window controls.
 
-For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Setup/Installation sections).
+For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Setup/Installation sections). Additionally, for a step-by-step walkthrough of using Slipstream with Heroic (including auto-updates), see the [bakkeslinux guide](https://github.com/beidoubagel/bakkeslinux) by @beidoubagel.
 </details>
 
 <details>
