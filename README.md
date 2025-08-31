@@ -74,7 +74,7 @@ For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyL
 <summary>FAQ & Troubleshooting</summary>
 
 #### Q: Do I still need the Epic Games Launcher installed?
-Yes, for installing and updating Rocket League. Slipstream lets you play without running the Epic Launcher.
+Yes (or an alternative like Heroic), for installing and updating Rocket League. Slipstream lets you play without running the Epic Launcher.
 
 #### Q: Does this improve in-game FPS?
 It can speed up game boot time but shouldn't affect in-game FPS.
