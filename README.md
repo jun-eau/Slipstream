@@ -112,4 +112,4 @@ The executable will be in the project directory.
 
 This project is open source (see `LICENSE` file).
 
-It's a derivative of [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**. Original project was unlicensed; an [issue](https://github.com/LittleScripterBoy/RocketLeagueLauncher/issues/1) requests a permissive license. Slipstream is distributed in good faith.
+It's a derivative of [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher); special thanks to **LittleScripterBoy** for releasing the original work under The Unlicense.
