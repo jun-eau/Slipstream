@@ -217,12 +217,13 @@ func showUpdateNotification(version string) {
 			"You can download the new version from the releases page.",
 		currentVersion, version,
 	)
-	err := zenity.Info(message,
+	err := zenity.Question(message,
 		zenity.Title("Update Available"),
-		zenity.ExtraButton("Open Download Page"),
+		zenity.OKLabel("Open Download Page"),
+		zenity.CancelLabel("Ignore"),
 		zenity.InfoIcon,
 	)
-	if err == zenity.ErrExtraButton {
+	if err == nil {
 		openBrowser("https://github.com/jun-eau/Slipstream/releases/latest")
 	}
 }
@@ -388,10 +389,10 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 // --- Authentication Steps ---
 
 func (a *Authenticator) performFirstTimeSetup() (string, error) {
-	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account...\n\nIf your browser does not open automatically, please manually copy and paste this link into your browser:\n\n" + epicLoginRedirect + "\n\nAfter logging in, copy the 'authorizationCode' value from the page you are redirected to.")
+	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account, then copy the 'authorizationCode' value from the page you are redirected to.")
 	openBrowser(epicLoginRedirect)
 
-	authCodeStr, err := askForInput("Enter Authorization Code", "Paste the 32-character authorization code here:")
+	authCodeStr, err := askForInput("Enter Authorization Code", "Paste the 32-character authorization code here.\n\nIf the browser did not open, use this link:\n"+epicLoginRedirect)
 	if err != nil {
 		return "", fmt.Errorf("user cancelled input")
 	}
@@ -507,9 +508,9 @@ func loadConfig() (Config, error) {
 
 	// If the path is missing, always prompt for it.
 	if cfg.RocketLeaguePath == "" {
-		showInfo("Rocket League Path Setup", "Please locate your Rocket League executable (e.g., RocketLeague.exe). This will only be asked once.")
+		showInfo("Rocket League Path Setup", "Please locate and select RocketLeague_EAC.exe (usually found in Binaries/Win64).")
 		rlPath, err := zenity.SelectFile(
-			zenity.Title("Select Rocket League Executable"),
+			zenity.Title("Select RocketLeague_EAC.exe"),
 			zenity.FileFilters{
 				{Name: "Rocket League Executable", Patterns: []string{"RocketLeague.exe", "RocketLeague_EAC.exe", "RocketLeague"}, CaseFold: true},
 				{Name: "All Files", Patterns: []string{"*"}},
