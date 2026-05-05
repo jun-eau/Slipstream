@@ -40,6 +40,7 @@ The game will launch, and your settings will be saved in the `config.json` file.
 *   **Custom Launch Options**:
     1.  In Steam, right-click Slipstream -> **Properties...**
     2.  Under **General**, enter options in **Launch Options** (e.g., `-nomovie -high`). These are passed to Rocket League.
+    *   **To launch without Easy Anti-Cheat (EAC):** Add `-noeac` to your launch options. Slipstream will intercept this and launch the base game executable instead, allowing for offline play and modding.
 *   **Multiple Accounts**:
     1.  Create a **new, separate folder** for each account.
     2.  Copy the Slipstream executable into each new folder.
@@ -48,6 +49,8 @@ The game will launch, and your settings will be saved in the `config.json` file.
 
 <details>
 <summary>Optional: BakkesMod Setup</summary>
+
+**DEPRECATION WARNING: BakkesMod is no longer in active development and is blocked by Easy Anti-Cheat.** Slipstream now treats BakkesMod as a "Legacy Offline" feature. If BakkesMod is enabled in `config.json`, Slipstream will automatically force the game to launch without EAC (effectively applying the `-noeac` flag automatically), restricting you to offline modes only. To play online, you must disable BakkesMod in your configuration.
 
 Slipstream can automatically launch BakkesMod. If enabled during initial setup, you'll be prompted for `BakkesMod.exe`.
 
@@ -72,6 +75,9 @@ For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyL
 
 <details>
 <summary>FAQ & Troubleshooting</summary>
+
+#### Q: How does Slipstream handle Easy Anti-Cheat (EAC)?
+**A:** Slipstream automatically detects your game path and launches the `RocketLeague_EAC.exe` version by default, ensuring online play works out-of-the-box. Existing users do not need to update their `config.json`; Slipstream intercepts the launch and corrects the path in memory. If you wish to play offline without EAC, add `-noeac` to your launch options.
 
 #### Q: Do I still need the Epic Games Launcher installed?
 Yes (or an alternative like Heroic), for installing and updating Rocket League. Slipstream lets you play without running the Epic Launcher.
