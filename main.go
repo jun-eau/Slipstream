@@ -219,7 +219,7 @@ func showUpdateNotification(version string) {
 	)
 	err := zenity.Question(message,
 		zenity.Title("Update Available"),
-		zenity.OKLabel("Open Download Page"),
+		zenity.OKLabel("Download"),
 		zenity.CancelLabel("Ignore"),
 		zenity.InfoIcon,
 	)
@@ -389,10 +389,18 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 // --- Authentication Steps ---
 
 func (a *Authenticator) performFirstTimeSetup() (string, error) {
-	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account, then copy the 'authorizationCode' value from the page you are redirected to.")
+	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account, then copy the 'authorizationCode' value.")
+	
+	log.Println("Opening browser for login...")
 	openBrowser(epicLoginRedirect)
 
-	authCodeStr, err := askForInput("Enter Authorization Code", "Paste the 32-character authorization code here.\n\nIf the browser did not open, use this link:\n"+epicLoginRedirect)
+	// LOG TO COMMAND PROMPT: This acts as your indestructible fallback.
+	fmt.Printf("\n------------------------------------------------------------\n")
+	fmt.Printf("BROWSER FALLBACK:\nIf your browser did not open, copy and paste this link:\n%s\n", epicLoginRedirect)
+	fmt.Printf("------------------------------------------------------------\n\n")
+
+	// CLEAN GUI: Keep the message short so it never truncates.
+	authCodeStr, err := askForInput("Enter Authorization Code", "Paste the 32-character authorization code:")
 	if err != nil {
 		return "", fmt.Errorf("user cancelled input")
 	}
