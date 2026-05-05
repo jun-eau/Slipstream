@@ -13,6 +13,7 @@ import (
 	"path/filepath"
 	"runtime"
 	"strings"
+	"sync"
 	"time" // Added for BakkesMod launch delay
 
 	"github.com/google/uuid"
@@ -21,7 +22,7 @@ import (
 
 // --- Constants ---
 const (
-	currentVersion = "v1.6.0"
+	currentVersion = "v1.7.0"
 
 	// API Configuration
 	epicAPIURL       = "https://account-public-service-prod.ak.epicgames.com/account/api"
@@ -137,8 +138,11 @@ func main() {
 
 	// 5. Check for updates in the background.
 	// Pass a pointer to cfg so the goroutine can modify it
-	go checkForUpdates(&cfg)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go checkForUpdates(&cfg, &wg)
 
+	wg.Wait()
 }
 
 // --- Update Checker ---
@@ -157,7 +161,8 @@ func isNewerVersion(current, latest string) bool {
 
 // checkForUpdates fetches the latest release from GitHub and notifies the user if it's a new version.
 // It runs in a goroutine to avoid blocking the main application flow.
-func checkForUpdates(cfg *Config) {
+func checkForUpdates(cfg *Config, wg *sync.WaitGroup) {
+	defer wg.Done()
 	log.Println("Checking for application updates...")
 	// Use a longer timeout for the update check
 	client := &http.Client{Timeout: 10 * time.Second}
@@ -212,18 +217,14 @@ func showUpdateNotification(version string) {
 			"You can download the new version from the releases page.",
 		currentVersion, version,
 	)
-	// We use a goroutine for the dialog itself to prevent any potential blocking
-	// on the main update goroutine, although it's generally not an issue with zenity.
-	go func() {
-		err := zenity.Info(message,
-			zenity.Title("Update Available"),
-			zenity.ExtraButton("Open Download Page"),
-			zenity.InfoIcon,
-		)
-		if err == zenity.ErrExtraButton {
-			openBrowser("https://github.com/jun-eau/Slipstream/releases/latest")
-		}
-	}()
+	err := zenity.Info(message,
+		zenity.Title("Update Available"),
+		zenity.ExtraButton("Open Download Page"),
+		zenity.InfoIcon,
+	)
+	if err == zenity.ErrExtraButton {
+		openBrowser("https://github.com/jun-eau/Slipstream/releases/latest")
+	}
 }
 
 // --- Core Functions ---
@@ -307,8 +308,11 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 	useEAC := true
 	filteredExtraArgs := []string{}
 	for _, arg := range extraArgs {
-		if strings.ToLower(arg) == "-noeac" {
+		argLower := strings.ToLower(arg)
+		if argLower == "-noeac" {
 			useEAC = false
+		} else if strings.HasPrefix(argLower, "--config=") {
+			// Do nothing, just skip the --config= flag
 		} else {
 			filteredExtraArgs = append(filteredExtraArgs, arg)
 		}
@@ -384,7 +388,7 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 // --- Authentication Steps ---
 
 func (a *Authenticator) performFirstTimeSetup() (string, error) {
-	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account, then copy the 'authorizationCode' value from the page you are redirected to.")
+	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account...\n\nIf your browser does not open automatically, please manually copy and paste this link into your browser:\n\n" + epicLoginRedirect + "\n\nAfter logging in, copy the 'authorizationCode' value from the page you are redirected to.")
 	openBrowser(epicLoginRedirect)
 
 	authCodeStr, err := askForInput("Enter Authorization Code", "Paste the 32-character authorization code here:")
@@ -479,9 +483,22 @@ func (a *Authenticator) apiRequest(method, path string, data url.Values, authHea
 
 // --- Configuration Helpers ---
 
+func getConfigFileName() string {
+	for _, arg := range os.Args[1:] {
+		if strings.HasPrefix(strings.ToLower(arg), "--config=") {
+			// Extract the value after the '=' character to safely handle case sensitivity of the prefix
+			parts := strings.SplitN(arg, "=", 2)
+			if len(parts) == 2 {
+				return parts[1]
+			}
+		}
+	}
+	return configFileName
+}
+
 func loadConfig() (Config, error) {
 	var cfg Config
-	path := filepath.Join(getExecutableDir(), configFileName)
+	path := filepath.Join(getExecutableDir(), getConfigFileName())
 
 	file, err := os.ReadFile(path)
 	if err == nil {
@@ -568,7 +585,7 @@ func loadConfig() (Config, error) {
 }
 
 func saveConfig(cfg Config) error {
-	path := filepath.Join(getExecutableDir(), configFileName)
+	path := filepath.Join(getExecutableDir(), getConfigFileName())
 	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
 		return err
