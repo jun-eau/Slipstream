@@ -21,7 +21,7 @@ import (
 
 // --- Constants ---
 const (
-	currentVersion = "v1.5.1"
+	currentVersion = "v1.6.0"
 
 	// API Configuration
 	epicAPIURL       = "https://account-public-service-prod.ak.epicgames.com/account/api"
@@ -304,8 +304,34 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 		return nil // Expected outcome on Linux with .exe path
 	}
 
+	useEAC := true
+	filteredExtraArgs := []string{}
+	for _, arg := range extraArgs {
+		if strings.ToLower(arg) == "-noeac" {
+			useEAC = false
+		} else {
+			filteredExtraArgs = append(filteredExtraArgs, arg)
+		}
+	}
+
+	if cfg.BakkesModEnabled {
+		useEAC = false
+	}
+
+	rlDir := filepath.Dir(cfg.RocketLeaguePath)
+	rlFilename := filepath.Base(cfg.RocketLeaguePath)
+	rlFilenameLower := strings.ToLower(rlFilename)
+
+	if rlFilenameLower == "rocketleague.exe" || rlFilenameLower == "rocketleague_eac.exe" {
+		if useEAC {
+			cfg.RocketLeaguePath = filepath.Join(rlDir, "RocketLeague_EAC.exe")
+		} else {
+			cfg.RocketLeaguePath = filepath.Join(rlDir, "RocketLeague.exe")
+		}
+	}
+
 	// 2. Launch Rocket League (asynchronously).
-	log.Println("Launching Rocket League...")
+	log.Printf("Launching Rocket League... (Executable: %s)", cfg.RocketLeaguePath)
 	rlArgs := []string{
 		"-AUTH_LOGIN=unused",
 		"-AUTH_PASSWORD=" + creds.ExchangeCode,
@@ -316,7 +342,7 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 		"-epicusername=\"\"", // Intentionally empty as per original args
 		"-epicuserid=" + creds.AccountID,
 	}
-	rlArgs = append(rlArgs, extraArgs...)
+	rlArgs = append(rlArgs, filteredExtraArgs...)
 	rlCmd := exec.Command(cfg.RocketLeaguePath, rlArgs...)
 
 	if err := rlCmd.Start(); err != nil {
@@ -468,7 +494,7 @@ func loadConfig() (Config, error) {
 		rlPath, err := zenity.SelectFile(
 			zenity.Title("Select Rocket League Executable"),
 			zenity.FileFilters{
-				{Name: "Rocket League Executable", Patterns: []string{"RocketLeague.exe", "RocketLeague"}, CaseFold: true},
+				{Name: "Rocket League Executable", Patterns: []string{"RocketLeague.exe", "RocketLeague_EAC.exe", "RocketLeague"}, CaseFold: true},
 				{Name: "All Files", Patterns: []string{"*"}},
 			},
 		)
@@ -486,8 +512,8 @@ func loadConfig() (Config, error) {
 	// BakkesMod Setup Prompt - only if RL path is set and BM not already configured or declined
 	if cfg.RocketLeaguePath != "" && cfg.BakkesModPath == "" && !cfg.BakkesModSetupDeclined {
 		log.Println("Prompting for BakkesMod setup.")
-		err := zenity.Question("Would you like to enable automatic launching for BakkesMod?",
-			zenity.Title("BakkesMod Setup"),
+		err := zenity.Question("Would you like to enable legacy BakkesMod support?\n\nWARNING: BakkesMod has been discontinued and no longer works online. Enabling this will launch the game without Anti-Cheat, meaning you will only be able to play offline modes (Free Play, Replays, Custom Training).",
+			zenity.Title("BakkesMod Setup (Legacy/Offline)"),
 			zenity.DefaultCancel(), // Makes "No" the default if user just closes dialog
 			zenity.OKLabel("Yes"),
 			zenity.CancelLabel("No"),
