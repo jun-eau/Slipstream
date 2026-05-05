@@ -42,10 +42,10 @@ The game will launch, and your settings will be saved in the `config.json` file.
     2.  Under **General**, enter options in **Launch Options** (e.g., `-nomovie -high`). These are passed to Rocket League.
     *   **To launch without Easy Anti-Cheat (EAC):** Add `-noeac` to your launch options. Slipstream will intercept this and launch the base game executable instead, allowing for offline play and modding.
 *   **Multiple Accounts**:
-    1.  Create a **new, separate folder** for each account.
-    2.  Copy the Slipstream executable into each new folder.
-    3.  Run it from the new folder for that account's first-time setup.
-    4.  If using Steam, add each Slipstream instance as a separate non-Steam game.
+    1.  Add the Slipstream executable as a game to Steam or Heroic.
+    2.  In the launch options (Steam Properties -> General -> Launch Options), append the `--config=` argument with your desired filename (e.g., `--config=smurf.json`).
+    3.  Run the game to perform first-time setup for this new configuration.
+    4.  You can create as many configurations as you need without copying the executable.
 
 <details>
 <summary>Optional: BakkesMod Setup</summary>
