@@ -2,7 +2,7 @@
 
 Slipstream is a standalone, cross-platform app that launches the Epic Games version of Rocket League **without the Epic Games Launcher**.
 
-This project builds upon the original [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher) by **LittleScripterBoy**.
+This project builds upon the original [RocketLeagueLauncher](https://github.com/HiDefCode/RocketLeagueLauncher) by **HiDefCode**.
 
 ### Key Benefits
 
@@ -118,4 +118,4 @@ The executable will be in the project directory.
 
 This project is open source (see `LICENSE` file).
 
-It's a derivative of [RocketLeagueLauncher](https://github.com/LittleScripterBoy/RocketLeagueLauncher); special thanks to **LittleScripterBoy** for releasing the original work under The Unlicense.
+It's a derivative of [RocketLeagueLauncher](https://github.com/HiDefCode/RocketLeagueLauncher); special thanks to **HiDefCode** for releasing the original work under The Unlicense.
