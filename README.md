@@ -1,5 +1,10 @@
 # Slipstream: A Rocket League Launcher
 
+![Latest Release](https://img.shields.io/github/v/release/jun-eau/Slipstream)
+![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux-lightgrey)
+![Go Version](https://img.shields.io/github/go-mod/go-version/jun-eau/Slipstream)
+![License](https://img.shields.io/github/license/jun-eau/Slipstream)
+
 Slipstream is a standalone, cross-platform app that launches the Epic Games version of Rocket League **without the Epic Games Launcher**.
 
 This project builds upon the original [RocketLeagueLauncher](https://github.com/HiDefCode/RocketLeagueLauncher) by **HiDefCode**.
@@ -8,7 +13,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 
 *   **Integrate with Steam**: Seamlessly add the Epic Games version of Rocket League to Steam. Enables full support for the Steam Overlay, controller configurations, and the Steam Deck.
 *   **Skip the Epic Launcher**: Play Rocket League without the Epic Launcher running. Perfect for standalone use or with other launchers like Playnite and Lutris.
-*   **Optional BakkesMod**: Automatically launch BakkesMod with Rocket League (Windows & Linux).
+*   **Offline BakkesMod Support**: Automatically launch BakkesMod with Rocket League (Windows & Linux). *Note: Due to Easy Anti-Cheat, BakkesMod is currently restricted to offline/training modes only.*
 *   **Simple Multi-Account**: Easily switch between Epic accounts in Rocket League.
 *   **No Dependencies**: A single, dependency-free executable.
 
@@ -20,19 +25,17 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 2.  **Create a Folder**: Place the downloaded file in a new, dedicated folder. Slipstream will store its configuration file (`config.json`) there.
 3.  **Run Slipstream**:
     *   **Windows**: Double-click `Slipstream.exe`.
-    *   **Linux / Steam Deck**: The recommended method is to add `Slipstream.exe` to Steam as a non-Steam game and force the latest Proton version in its compatibility settings.
-        *   **Steam Deck users must do this in Desktop Mode.**
-        *   If the recommended method fails, use the native Linux binary (`chmod +x Slipstream && ./Slipstream`) to run the initial setup first.
+    *   **Linux / Steam Deck**: Add `Slipstream.exe` to Steam as a non-Steam game and force the latest Proton version in its compatibility settings. *(Steam Deck users must do this in Desktop Mode).*
+        *   **How to add to Steam:**
+            1. In Steam: Go to **Add a Game** -> **Add a Non-Steam Game...**
+            2. Click **Browse...**, locate `Slipstream.exe`, and select it.
+            3. Click **Add Selected Programs**.
+        *   *Troubleshooting:* If the recommended method fails on Linux, use the native Linux binary in your terminal (`chmod +x Slipstream && ./Slipstream`) to run the initial setup first.
 4.  **Initial Configuration (One-Time Setup)**:
-    *   **Locate Files:** The app will prompt you to select `RocketLeague.exe`. If you enable BakkesMod, it will also prompt for `BakkesMod.exe` (see "Optional: BakkesMod Setup" under Usage for more details).
+    *   **Locate Files:** The app will prompt you to select `RocketLeague.exe`. If you enable BakkesMod, it will also prompt for `BakkesMod.exe` (see "Optional: BakkesMod Setup" below).
     *   **Epic Games Login:** Your browser will open to log in. Copy the 32-character `authorizationCode` from the final page and paste it into Slipstream's dialog.
 
 The game will launch, and your settings will be saved in the `config.json` file.
-
-**To add Slipstream to Steam (Windows & Linux/Proton):**
-1. In Steam: **Add a Game** -> **Add a Non-Steam Game...**
-2. **Browse...** to `Slipstream.exe` and select it.
-3. Click **Add Selected Programs**.
 
 ## Usage
 
@@ -50,7 +53,7 @@ The game will launch, and your settings will be saved in the `config.json` file.
 <details>
 <summary>Optional: BakkesMod Setup</summary>
 
-**DEPRECATION WARNING: BakkesMod is no longer in active development and is blocked by Easy Anti-Cheat.** Slipstream now treats BakkesMod as a "Legacy Offline" feature. If BakkesMod is enabled in `config.json`, Slipstream will automatically force the game to launch without EAC (effectively applying the `-noeac` flag automatically), restricting you to offline modes only. To play online, you must disable BakkesMod in your configuration.
+**DEPRECATION WARNING:** BakkesMod is no longer in active development and is blocked by Easy Anti-Cheat. Slipstream now treats BakkesMod as a "Legacy Offline" feature. If BakkesMod is enabled in `config.json`, Slipstream will automatically force the game to launch without EAC (effectively applying the `-noeac` flag automatically), restricting you to offline modes only. To play online, you must disable BakkesMod in your configuration.
 
 Slipstream can automatically launch BakkesMod. If enabled during initial setup, you'll be prompted for `BakkesMod.exe`.
 
@@ -103,19 +106,6 @@ The Epic Launcher normally passes a language argument to the game. You can do th
 
 Requires **Go toolchain** (v1.24+).
 
-1.  **Clone:** `git clone https://github.com/jun-eau/Slipstream.git`
-2.  **Navigate:** `cd Slipstream`
-3.  **Build:**
-    *   **Windows (64-bit):** `go build -o Slipstream.exe .`
-        *   Cross-compile on Linux/macOS: `GOOS=windows GOARCH=amd64 go build -o Slipstream.exe .`
-    *   **Linux (64-bit):** `go build -o Slipstream .`
-        *   Cross-compile on Windows: `$env:GOOS = "linux"; $env:GOARCH = "amd64"; go build -o Slipstream .`
-
-The executable will be in the project directory.
-</details>
-
-## License and Credits
-
-This project is open source (see `LICENSE` file).
-
-It's a derivative of [RocketLeagueLauncher](https://github.com/HiDefCode/RocketLeagueLauncher); special thanks to **HiDefCode** for releasing the original work under The Unlicense.
+```bash
+git clone [https://github.com/jun-eau/Slipstream.git](https://github.com/jun-eau/Slipstream.git)
+cd Slipstream
