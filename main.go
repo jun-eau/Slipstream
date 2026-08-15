@@ -307,11 +307,16 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 	}
 
 	useEAC := true
+	useRLBot := false
 	filteredExtraArgs := []string{}
 	for _, arg := range extraArgs {
 		argLower := strings.ToLower(arg)
 		if argLower == "-noeac" {
 			useEAC = false
+		} else if argLower == "-rlbot" {
+			// The -rlbot flag must be the first, so we just note this for later
+			useRLBot = true
+			log.Println("RLBot mode enabled")
 		} else if strings.HasPrefix(argLower, "--config=") {
 			// Do nothing, just skip the --config= flag
 		} else {
@@ -348,6 +353,11 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 		"-epicuserid=" + creds.AccountID,
 	}
 	rlArgs = append(rlArgs, filteredExtraArgs...)
+	if useRLBot {
+		// -rlbot must be first
+		rlArgs = append([]string{"-rlbot"}, rlArgs...)
+	}
+
 	rlCmd := exec.Command(cfg.RocketLeaguePath, rlArgs...)
 
 	if err := rlCmd.Start(); err != nil {
@@ -390,7 +400,7 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 
 func (a *Authenticator) performFirstTimeSetup() (string, error) {
 	showInfo("Authorization Required", "A browser window will now open. Please log in to your Epic Games account, then copy the 'authorizationCode' value.")
-	
+
 	log.Println("Opening browser for login...")
 	openBrowser(epicLoginRedirect)
 
