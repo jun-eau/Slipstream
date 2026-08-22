@@ -41,6 +41,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
     1.  In Steam, right-click Slipstream -> **Properties...**
     2.  Under **General**, enter options in **Launch Options** (e.g., `-nomovie -high`). These are passed to Rocket League.
     *   **To launch without Easy Anti-Cheat (EAC):** Add `-noeac` to your launch options. Slipstream will intercept this and launch the base game executable instead, allowing for offline play and modding.
+    *   **To play with RLBot:** Add `-rlbot` along with your bot parameters (e.g., `-rlbot RLBot_ControllerURL=127.0.0.1:23233 RLBot_PacketSendRate=240`) to your launch options. Slipstream will automatically ensure the `-rlbot` flag is passed first, as required by the bot API.
 *   **Multiple Accounts**:
     1.  Add the Slipstream executable as a game to Steam or Heroic.
     2.  In the launch options (Steam Properties -> General -> Launch Options), append the `--config=` argument with your desired filename (e.g., `--config=smurf.json`).
