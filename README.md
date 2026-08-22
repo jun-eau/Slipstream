@@ -7,6 +7,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 ### Key Benefits
 
 *   **Integrate with Steam**: Seamlessly add the Epic Games version of Rocket League to Steam. Enables full support for the Steam Overlay, controller configurations, and the Steam Deck.
+*   **Launch Options**: Easily apply launch options to skip movies, launch without Easy Anti-Cheat, or open in RLBot mode.
 *   **Skip the Epic Launcher**: Play Rocket League without the Epic Launcher running. Perfect for standalone use or with other launchers like Playnite and Lutris.
 *   **Simple Multi-Account**: Easily switch between Epic accounts in Rocket League.
 *   **No Dependencies**: A single, dependency-free executable.
