@@ -6,10 +6,10 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 
 ### Key Benefits
 
-*   **Integrate with Steam**: Seamlessly add the Epic Games version of Rocket League to Steam. Enables full support for the Steam Overlay, controller configurations, and the Steam Deck.
+*   **Integrate with Steam**: Add the Epic Games version of Rocket League to Steam. This enables full support for the Steam Overlay, controller configurations, and the Steam Deck.
 *   **Launch Options**: Easily apply launch options to skip movies, launch without Easy Anti-Cheat, or open in RLBot mode.
-*   **Skip the Epic Launcher**: Play Rocket League without the Epic Launcher running. Perfect for standalone use or with other launchers like Playnite and Lutris.
-*   **Simple Multi-Account**: Easily switch between Epic accounts in Rocket League.
+*   **Skip the Epic Launcher**: Play Rocket League without the Epic Launcher running in the background. Perfect for standalone use or with other launchers like Playnite and Lutris.
+*   **Simple Multi-Account**: Easily switch between Epic accounts in Rocket League using custom config files.
 *   **No Dependencies**: A single, dependency-free executable.
 
 ## Installation & Setup
@@ -21,11 +21,15 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 2.  Place the downloaded file in a new, dedicated folder. Slipstream will store its configuration file (`config.json`) here.
 
 ### 2. First-Time Setup (Windows)
-1. Double-click `Slipstream.exe` to run it.
-2. The app will prompt you to select `RocketLeague.exe`.
-3. Your browser will open to the Epic Games login page. Log in, copy the 32-character `authorizationCode` from the final page, and paste it into Slipstream's dialog.
-4. The game will launch, and your settings will be saved.
-5. **(Optional) Add to Steam**: In Steam, select **Add a Game** -> **Add a Non-Steam Game...**, browse for `Slipstream.exe`, and click **Add Selected Programs**.
+*Note: If you play with a controller (Xbox, PlayStation, Steam Controller), follow these steps exactly so your inputs work correctly through Steam.*
+
+1. In Steam, select **Add a Game** -> **Add a Non-Steam Game...**, browse for `Slipstream.exe`, and click **Add Selected Programs**.
+2. Launch Slipstream directly from your Steam library.
+3. The app will prompt you to select `RocketLeague.exe`.
+4. Your browser will open to the Epic Games login page. Log in, copy the 32-character `authorizationCode` from the final page, and paste it into Slipstream's dialog.
+5. The game will launch, and your settings will be saved.
+
+> **Note for Keyboard & Mouse Users:** If you don't need Steam's controller support or overlay, you can skip adding it to Steam and just double-click the `.exe` directly.
 
 ### 2. First-Time Setup (Linux / Steam Deck)
 1. Add the downloaded `Slipstream.exe` to Steam as a non-Steam game (**Steam Deck users must do this in Desktop Mode**).
@@ -33,6 +37,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 3. Launch the game through Steam. The app will prompt you to select `RocketLeague.exe`.
 4. Your browser will open to the Epic Games login page. Log in, copy the 32-character `authorizationCode` from the final page, and paste it into Slipstream's dialog.
 5. The game will launch, and your settings will be saved.
+6. Once the game launches successfully, you can return to Gaming Mode. Slipstream will continue to boot directly from your Steam library with full controller support.
 *(Note: If this method fails, you can use the native Linux binary (`chmod +x Slipstream && ./Slipstream`) to run the initial setup first).*
 
 ## Usage
@@ -44,16 +49,22 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
     *   **To launch without Easy Anti-Cheat (EAC):** Add `-noeac` to your launch options. Slipstream will intercept this and launch the base game executable instead, allowing for offline play and modding.
     *   **To play with RLBot:** Add `-rlbot` along with your bot parameters (e.g., `-rlbot RLBot_ControllerURL=127.0.0.1:23233 RLBot_PacketSendRate=240`) to your launch options. Slipstream will automatically ensure the `-rlbot` flag is passed first, as required by the bot API.
 *   **Multiple Accounts**:
-    1.  Add the Slipstream executable as a game to Steam or Heroic.
+    1.  Add the Slipstream executable as a game to Steam (or another launcher) a second time.
     2.  In the launch options (Steam Properties -> General -> Launch Options), append the `--config=` argument with your desired filename (e.g., `--config=smurf.json`).
-    3.  Run the game to perform first-time setup for this new configuration.
+    3.  Run the shortcut to perform first-time setup for this new configuration.
     4.  You can create as many configurations as you need without copying the executable.
 
 <details>
 <summary>FAQ & Troubleshooting</summary>
 
+#### Q: My Steam Deck controls / Steam Controller / PlayStation controller doesn't work!
+You are likely launching Slipstream directly from your desktop. To use Steam Input (which is required for these controllers and custom deadzones), you **must** add Slipstream to Steam and launch it directly from your Steam library.
+
+#### Q: Will Slipstream update Rocket League automatically? / "Version Mismatch" error
+Since Slipstream bypasses the Epic Games Launcher, it also bypasses Epic's automatic game updates. If you receive a "version mismatch" error when trying to play online, open the Epic Games Launcher (or Heroic) to let the game patch, then close it and use Slipstream again.
+
 #### Q: How does Slipstream handle Easy Anti-Cheat (EAC)?
-**A:** Slipstream automatically detects your game path and launches the `RocketLeague_EAC.exe` version by default, ensuring online play works out-of-the-box. Existing users do not need to update their `config.json`; Slipstream intercepts the launch and corrects the path in memory. If you wish to play offline without EAC, add `-noeac` to your launch options.
+Slipstream automatically detects your game path and launches the `RocketLeague_EAC.exe` version by default, ensuring online play works out-of-the-box. Existing users do not need to update their `config.json`; Slipstream intercepts the launch and corrects the path in memory. If you wish to play offline without EAC, add `-noeac` to your launch options.
 
 #### Q: Do I still need the Epic Games Launcher installed?
 Yes (or an alternative like Heroic), for installing and updating Rocket League. Slipstream lets you play without running the Epic Launcher.
@@ -66,9 +77,6 @@ Slipstream is minimal, focused only on launching Rocket League via other launche
 
 #### Q: Does Slipstream modify game files?
 No. It only reads your game path to launch the game.
-
-#### Q: I'm getting a "version mismatch" error when I try to play online.
-This means your game is out of date. Since Slipstream bypasses the launcher, it also bypasses the automatic update check. Run the Epic Games Launcher or your launcher of choice to make sure Rocket League is fully updated, then try launching with Slipstream again.
 
 #### Q: My game is in the wrong language, how do I change it?
 The Epic Launcher normally passes a language argument to the game. You can do this yourself in Slipstream's launch options. To force English, add `-language=INT`. Other common codes include `DEU` (German), `FRA` (French), and `ESN` (Spanish).
