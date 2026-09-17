@@ -22,7 +22,7 @@ import (
 
 // --- Constants ---
 const (
-	currentVersion = "v1.7.0"
+	currentVersion = "v1.9.0"
 
 	// API Configuration
 	epicAPIURL       = "https://account-public-service-prod.ak.epicgames.com/account/api"
@@ -102,39 +102,62 @@ func main() {
 		return
 	}
 
-	// 2. Authenticate with Epic Games to get launch credentials.
-	auth := NewAuthenticator()
-	creds, newEpicToken, err := auth.GetLaunchCredentials(cfg.EpicToken)
-	if err != nil {
-		detailedMsg := "Authentication Failed.\n\n" +
-			"Your session may have expired or the authentication details are incorrect. The simplest fix is often to delete the 'config.json' file and run Slipstream again to log in from scratch.\n\n" +
-			"Details: " + err.Error()
-		showError("Authentication Failed", detailedMsg)
-		return
-	}
+	// Loop for authentication and launching so we can retry on failure.
+	for {
+		// 2. Authenticate with Epic Games to get launch credentials.
+		auth := NewAuthenticator()
+		creds, newEpicToken, err := auth.GetLaunchCredentials(cfg.EpicToken)
+		if err != nil {
+			detailedMsg := "Authentication Failed.\n\n" +
+				"Your session may have expired or the authentication details are incorrect.\n\n" +
+				"Details: " + err.Error()
 
-	// 3. Save the new token if it has changed.
-	if newEpicToken != "" && newEpicToken != cfg.EpicToken {
-		log.Println("Saving new session token.")
-		cfg.EpicToken = newEpicToken
-		if err := saveConfig(cfg); err != nil {
-			log.Printf("Warning: could not save new session token: %v", err)
+			resetErr := zenity.Question(detailedMsg,
+				zenity.Title("Authentication Failed"),
+				zenity.OKLabel("Reset Login Configuration"),
+				zenity.CancelLabel("Exit"),
+				zenity.ErrorIcon,
+			)
+
+			if resetErr == nil {
+				// User clicked OK to reset
+				log.Println("User opted to reset login configuration.")
+				cfg.EpicToken = ""
+				if err := saveConfig(cfg); err != nil {
+					log.Printf("Warning: could not save cleared token to config: %v", err)
+				}
+				// Loop continues, which will retry authentication with a cleared token
+				continue
+			} else {
+				// User clicked Exit or closed the window
+				return
+			}
 		}
-	}
 
-	// 4. Launch Rocket League with the obtained credentials and any extra args.
-	log.Println("Successfully authenticated. Launching Rocket League...")
-	// os.Args[0] is the program name, os.Args[1:] is all subsequent arguments.
-	// Updated to pass the full cfg object
-	if err := launchGame(cfg, creds, os.Args[1:]); err != nil {
-		detailedMsg := "Failed to Launch Rocket League.\n\n" +
-			"Please ensure the Rocket League path is correctly set in 'config.json' and that the game executable is not missing or corrupted.\n\n" +
-			"Details: " + err.Error()
-		showError("Failed to Launch Rocket League", detailedMsg)
-		return
-	}
+		// 3. Save the new token if it has changed.
+		if newEpicToken != "" && newEpicToken != cfg.EpicToken {
+			log.Println("Saving new session token.")
+			cfg.EpicToken = newEpicToken
+			if err := saveConfig(cfg); err != nil {
+				log.Printf("Warning: could not save new session token: %v", err)
+			}
+		}
 
-	log.Println("Game process started successfully.")
+		// 4. Launch Rocket League with the obtained credentials and any extra args.
+		log.Println("Successfully authenticated. Launching Rocket League...")
+		// os.Args[0] is the program name, os.Args[1:] is all subsequent arguments.
+		// Updated to pass the full cfg object
+		if err := launchGame(cfg, creds, os.Args[1:]); err != nil {
+			detailedMsg := "Failed to Launch Rocket League.\n\n" +
+				"Please ensure the Rocket League path is correctly set in 'config.json' and that the game executable is not missing or corrupted.\n\n" +
+				"Details: " + err.Error()
+			showError("Failed to Launch Rocket League", detailedMsg)
+			return
+		}
+
+		log.Println("Game process started successfully.")
+		break // Break the loop on successful launch
+	}
 
 	// 5. Check for updates in the background.
 	// Pass a pointer to cfg so the goroutine can modify it
@@ -193,12 +216,14 @@ func checkForUpdates(cfg *Config, wg *sync.WaitGroup) {
 		if cfg.LastNotifiedVersion != latestVersion {
 			log.Println("Notifying user about the new version.")
 			// Use a separate function to show the dialog to keep this clean
-			showUpdateNotification(latestVersion)
+			action := showUpdateNotification(latestVersion)
 
-			// Update the config and save it
-			cfg.LastNotifiedVersion = latestVersion
-			if err := saveConfig(*cfg); err != nil {
-				log.Printf("Warning: failed to save last notified version: %v", err)
+			if action == "skip" {
+				// Update the config and save it
+				cfg.LastNotifiedVersion = latestVersion
+				if err := saveConfig(*cfg); err != nil {
+					log.Printf("Warning: failed to save last notified version: %v", err)
+				}
 			}
 		} else {
 			log.Printf("Already notified user about version %s. Skipping.", latestVersion)
@@ -208,8 +233,8 @@ func checkForUpdates(cfg *Config, wg *sync.WaitGroup) {
 	}
 }
 
-// showUpdateNotification displays the update dialog to the user.
-func showUpdateNotification(version string) {
+// showUpdateNotification displays the update dialog to the user and returns the action taken.
+func showUpdateNotification(version string) string {
 	message := fmt.Sprintf(
 		"A new version of Slipstream is available!\n\n"+
 			"You are on version: %s\n"+
@@ -219,13 +244,18 @@ func showUpdateNotification(version string) {
 	)
 	err := zenity.Question(message,
 		zenity.Title("Update Available"),
-		zenity.OKLabel("Download"),
-		zenity.CancelLabel("Ignore"),
+		zenity.OKLabel("Update Now"),
+		zenity.CancelLabel("Skip This Version"),
+		zenity.ExtraButton("Remind Me Later"),
 		zenity.InfoIcon,
 	)
 	if err == nil {
 		openBrowser("https://github.com/jun-eau/Slipstream/releases/latest")
+		return "update"
+	} else if err == zenity.ErrExtraButton {
+		return "remind"
 	}
+	return "skip"
 }
 
 // --- Core Functions ---
@@ -526,9 +556,9 @@ func loadConfig() (Config, error) {
 
 	// If the path is missing, always prompt for it.
 	if cfg.RocketLeaguePath == "" {
-		showInfo("Rocket League Path Setup", "Please locate and select RocketLeague_EAC.exe (usually found in Binaries/Win64).")
+		showInfo("Rocket League Path Setup", "Please locate and select RocketLeague.exe (usually found in Binaries/Win64).")
 		rlPath, err := zenity.SelectFile(
-			zenity.Title("Select RocketLeague_EAC.exe"),
+			zenity.Title("Select RocketLeague.exe"),
 			zenity.FileFilters{
 				{Name: "Rocket League Executable", Patterns: []string{"RocketLeague.exe", "RocketLeague_EAC.exe", "RocketLeague"}, CaseFold: true},
 				{Name: "All Files", Patterns: []string{"*"}},
