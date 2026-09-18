@@ -114,7 +114,7 @@ func main() {
 
 			resetErr := zenity.Question(detailedMsg,
 				zenity.Title("Authentication Failed"),
-				zenity.OKLabel("Reset Login Configuration"),
+				zenity.OKLabel("Reset Login"),
 				zenity.CancelLabel("Exit"),
 				zenity.ErrorIcon,
 			)
@@ -244,9 +244,9 @@ func showUpdateNotification(version string) string {
 	)
 	err := zenity.Question(message,
 		zenity.Title("Update Available"),
-		zenity.OKLabel("Update Now"),
-		zenity.CancelLabel("Skip This Version"),
-		zenity.ExtraButton("Remind Me Later"),
+		zenity.OKLabel("Update"),
+		zenity.CancelLabel("Skip"),
+		zenity.ExtraButton("Snooze"),
 		zenity.InfoIcon,
 	)
 	if err == nil {
