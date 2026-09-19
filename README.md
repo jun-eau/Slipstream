@@ -20,7 +20,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 1.  Go to the [**Releases page**](https://github.com/jun-eau/Slipstream/releases/latest) and download the executable for your platform.
 2.  Place the downloaded file in a new, dedicated folder. Slipstream will store its configuration file (`config.json`) here.
 
-### 2. First-Time Setup (Windows)
+### 2. Standard First-Time Setup (Windows)
 *Note: If you play with a controller (Xbox, PlayStation, Steam Controller), follow these steps exactly so your inputs work correctly through Steam.*
 
 1. In Steam, select **Add a Game** -> **Add a Non-Steam Game...**, browse for `Slipstream.exe`, and click **Add Selected Programs**.
@@ -31,7 +31,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 
 > **Note for Keyboard & Mouse Users:** If you don't need Steam's controller support or overlay, you can skip adding it to Steam and just double-click the `.exe` directly.
 
-### 2. First-Time Setup (Linux / Steam Deck)
+### 3. Standard First-Time Setup (Linux / Steam Deck)
 1. Add the downloaded `Slipstream.exe` to Steam as a non-Steam game (**Steam Deck users must do this in Desktop Mode**).
 2. Right-click the game in your Steam library, go to **Properties** -> **Compatibility**, and force the use of the latest Proton version.
 3. Launch the game through Steam. The app will prompt you to select `RocketLeague.exe`.
@@ -98,32 +98,31 @@ Requires **Go toolchain** (v1.24+).
 The executable will be in the project directory.
 </details>
 
-## Deprecated Features
+## Advanced Usage (Legacy BakkesMod)
 
 <details>
 <summary>Legacy Feature: BakkesMod Setup (Deprecated)</summary>
 
-**DEPRECATION WARNING: BakkesMod is no longer in active development and is blocked by Easy Anti-Cheat.** Slipstream now treats BakkesMod as a "Legacy Offline" feature. If BakkesMod is enabled in `config.json`, Slipstream will automatically force the game to launch without EAC (effectively applying the `-noeac` flag automatically), restricting you to offline modes only. To play online, you must disable BakkesMod in your configuration.
+**DEPRECATION WARNING: BakkesMod is no longer in active development and is blocked by Easy Anti-Cheat.** Slipstream now treats BakkesMod as a "Legacy Offline" feature. If BakkesMod is enabled in `config.json`, Slipstream will automatically force the game to launch without EAC (effectively applying the `-noeac` flag automatically), restricting you to offline modes only (Free Play, Replays, Custom Training). To play online, you must disable BakkesMod in your configuration.
 
-Slipstream can automatically launch BakkesMod. If enabled during initial setup, you'll be prompted for `BakkesMod.exe`.
+BakkesMod setup is no longer automated during the first-time setup to avoid confusion for new users. If you are an advanced user and wish to use BakkesMod offline, you can manually configure it.
 
-**Windows:**
-1. Install BakkesMod from [bakkesmod.com](https://bakkesmod.com/).
-2. When Slipstream asks, locate `BakkesMod.exe` (usually `C:\Program Files\BakkesMod\BakkesMod.exe`).
+To manually enable legacy BakkesMod support:
+1. Ensure Slipstream has been run at least once to generate the `config.json` file.
+2. Open `config.json` in a text editor.
+3. Add the following lines to your configuration (adjust the path to match your installation):
 
-**Linux (using Wine/Proton):**
-BakkesMod is a Windows application, so it runs within Wine/Proton.
-1. Download `BakkesModSetup.exe` from [bakkesmod.com](https://bakkesmod.com/).
-2. Install it using your Wine/Proton environment:
-    * **Proton (via Steam):** Add `BakkesModSetup.exe` as a non-Steam game, force the same Proton version as Slipstream/Rocket League, and run it once.
-    * **Wine (standalone):** `wine /path/to/BakkesModSetup.exe`.
-3. Point Slipstream to the installed `BakkesMod.exe` within your Wine/Proton prefix (e.g., `~/.wine/drive_c/Program Files/BakkesMod/BakkesMod.exe` or `~/.steam/steam/steamapps/compatdata/<AppID>/pfx/drive_c/Program Files/BakkesMod/BakkesMod.exe`).
+```json
+  "bakkesmod_enabled": true,
+  "bakkesmod_path": "C:\\Program Files\\BakkesMod\\BakkesMod.exe",
+```
+
+If you are using Linux/Proton, ensure the path points to the `BakkesMod.exe` within your Wine/Proton prefix (e.g., `"Z:\\home\\deck\\.steam\\steam\\steamapps\\compatdata\\<AppID>\\pfx\\drive_c\\Program Files\\BakkesMod\\BakkesMod.exe"` or equivalent).
 
 > **If "Mod is out of date, waiting for an update" appears:** In the BakkesMod window (once running with Rocket League), go to "Settings", uncheck "Enable safe mode", and click "Yes" on the warning.
 
 > **Steam Deck Users:** Navigating the BakkesMod window in Gaming Mode may require using the `Steam` button to access window controls.
 
-For detailed Linux help, see the [BakkesLinux guide](https://github.com/CrumblyLiquid/BakkesLinux) (Setup/Installation sections). Additionally, for a step-by-step walkthrough of using Slipstream with Heroic (including auto-updates), see the [bakkeslinux guide](https://github.com/beidoubagel/bakkeslinux) by @beidoubagel.
 </details>
 
 ## License and Credits
