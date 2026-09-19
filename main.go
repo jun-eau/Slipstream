@@ -45,7 +45,6 @@ type Config struct {
 	BakkesModEnabled       bool   `json:"bakkesmod_enabled"` // No omitempty, so it defaults to false in JSON
 	BakkesModPath          string `json:"bakkesmod_path,omitempty"`
 	BakkesModLaunchDelay   int    `json:"bakkesmod_launch_delay,omitempty"`
-	BakkesModSetupDeclined bool   `json:"bakkesmod_setup_declined"` // No omitempty, so it defaults to false
 	LastNotifiedVersion    string `json:"last_notified_version,omitempty"`
 }
 
@@ -444,8 +443,10 @@ func (a *Authenticator) performFirstTimeSetup() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("user cancelled input")
 	}
+
+	authCodeStr = strings.TrimSpace(authCodeStr)
 	if len(authCodeStr) != 32 {
-		return "", fmt.Errorf("invalid authorization code: must be 32 characters long")
+		return "", fmt.Errorf("invalid authorization code: must be 32 characters long. You entered %d characters.", len(authCodeStr))
 	}
 
 	log.Println("Exchanging authorization code for refresh token...")
@@ -568,55 +569,9 @@ func loadConfig() (Config, error) {
 			return cfg, fmt.Errorf("you must select a Rocket League path to continue")
 		}
 		cfg.RocketLeaguePath = rlPath
-		// Save immediately after getting RL path, so it's there before BM setup
+		// Save immediately after getting RL path
 		if err := saveConfig(cfg); err != nil {
-			// Log or show error, but try to continue to BM setup if possible
 			log.Printf("Warning: could not save Rocket League path: %v", err)
-		}
-	}
-
-	// BakkesMod Setup Prompt - only if RL path is set and BM not already configured or declined
-	if cfg.RocketLeaguePath != "" && cfg.BakkesModPath == "" && !cfg.BakkesModSetupDeclined {
-		log.Println("Prompting for BakkesMod setup.")
-		err := zenity.Question("Would you like to enable legacy BakkesMod support?\n\nWARNING: BakkesMod has been discontinued and no longer works online. Enabling this will launch the game without Anti-Cheat, meaning you will only be able to play offline modes (Free Play, Replays, Custom Training).",
-			zenity.Title("BakkesMod Setup (Legacy/Offline)"),
-			zenity.DefaultCancel(), // Makes "No" the default if user just closes dialog
-			zenity.OKLabel("Yes"),
-			zenity.CancelLabel("No"),
-		)
-
-		if err == nil { // User clicked "Yes"
-			log.Println("User opted to set up BakkesMod.")
-			bmPath, err := zenity.SelectFile(
-				zenity.Title("Select BakkesMod.exe"),
-				zenity.FileFilters{
-					{Name: "BakkesMod Executable", Patterns: []string{"BakkesMod.exe"}, CaseFold: true},
-					{Name: "All Files", Patterns: []string{"*"}},
-				},
-			)
-			if err == nil && bmPath != "" {
-				log.Printf("BakkesMod path selected: %s", bmPath)
-				cfg.BakkesModPath = bmPath
-				cfg.BakkesModEnabled = true
-				if cfg.BakkesModLaunchDelay == 0 { // Set default delay if not already set by user
-					cfg.BakkesModLaunchDelay = 5
-				}
-				cfg.BakkesModSetupDeclined = false // Ensure this is false if they just set it up
-			} else {
-				log.Println("User did not select a BakkesMod path or cancelled.")
-				// User cancelled BakkesMod selection, treat as "No" for this session, but don't set Declined.
-				// They might want to try again next time.
-				// If we want to treat this as a permanent "No", we'd set BakkesModSetupDeclined = true here.
-				// For now, let's assume cancelling file dialog means they don't want it *now*.
-			}
-		} else { // User clicked "No" or closed the dialog
-			log.Println("User declined BakkesMod setup.")
-			cfg.BakkesModSetupDeclined = true
-			cfg.BakkesModEnabled = false // Ensure it's disabled if they decline
-		}
-		// Save config after BM interaction (or lack thereof)
-		if err := saveConfig(cfg); err != nil {
-			return cfg, fmt.Errorf("could not save BakkesMod configuration: %w", err)
 		}
 	}
 
