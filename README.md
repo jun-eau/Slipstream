@@ -31,7 +31,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 
 > **Note for Keyboard & Mouse Users:** If you don't need Steam's controller support or overlay, you can skip adding it to Steam and just double-click the `.exe` directly.
 
-### 3. Standard First-Time Setup (Linux / Steam Deck)
+### 2. Standard First-Time Setup (Linux / Steam Deck)
 1. Add the downloaded `Slipstream.exe` to Steam as a non-Steam game (**Steam Deck users must do this in Desktop Mode**).
 2. Right-click the game in your Steam library, go to **Properties** -> **Compatibility**, and force the use of the latest Proton version.
 3. Launch the game through Steam. The app will prompt you to select `RocketLeague.exe`.
