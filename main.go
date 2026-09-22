@@ -357,15 +357,20 @@ func launchGame(cfg Config, creds LaunchCredentials, extraArgs []string) error {
 		useEAC = false
 	}
 
-	rlDir := filepath.Dir(cfg.RocketLeaguePath)
-	rlFilename := filepath.Base(cfg.RocketLeaguePath)
-	rlFilenameLower := strings.ToLower(rlFilename)
-
-	if rlFilenameLower == "rocketleague.exe" || rlFilenameLower == "rocketleague_eac.exe" {
+	pathLower := strings.ToLower(cfg.RocketLeaguePath)
+	if strings.HasSuffix(pathLower, "rocketleague.exe") {
+		basePath := cfg.RocketLeaguePath[:len(cfg.RocketLeaguePath)-len("rocketleague.exe")]
 		if useEAC {
-			cfg.RocketLeaguePath = filepath.Join(rlDir, "RocketLeague_EAC.exe")
+			cfg.RocketLeaguePath = basePath + "RocketLeague_EAC.exe"
 		} else {
-			cfg.RocketLeaguePath = filepath.Join(rlDir, "RocketLeague.exe")
+			cfg.RocketLeaguePath = basePath + "RocketLeague.exe"
+		}
+	} else if strings.HasSuffix(pathLower, "rocketleague_eac.exe") {
+		basePath := cfg.RocketLeaguePath[:len(cfg.RocketLeaguePath)-len("rocketleague_eac.exe")]
+		if useEAC {
+			cfg.RocketLeaguePath = basePath + "RocketLeague_EAC.exe"
+		} else {
+			cfg.RocketLeaguePath = basePath + "RocketLeague.exe"
 		}
 	}
 
