@@ -29,7 +29,7 @@ This project builds upon the original [RocketLeagueLauncher](https://github.com/
 4. Your browser will open to the Epic Games login page. Log in, copy the 32-character `authorizationCode` from the final page, and paste it into Slipstream's dialog.
 5. The game will launch, and your settings will be saved.
 
-> **Note for Keyboard & Mouse Users:** If you don't need Steam's controller support or overlay, you can skip adding it to Steam and just double-click the `.exe` directly.
+> **Note:** If you don't need Steam's controller support or overlay, you can skip adding it to Steam and just double-click the `.exe` directly.
 
 ### 2. Standard First-Time Setup (Linux / Steam Deck)
 1. Add the downloaded `Slipstream.exe` to Steam as a non-Steam game (**Steam Deck users must do this in Desktop Mode**).
