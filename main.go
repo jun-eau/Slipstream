@@ -22,7 +22,7 @@ import (
 
 // --- Constants ---
 const (
-	currentVersion = "v1.9.1"
+	currentVersion = "v1.9.2"
 
 	// API Configuration
 	epicAPIURL       = "https://account-public-service-prod.ak.epicgames.com/account/api"
